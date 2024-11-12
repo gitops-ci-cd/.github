@@ -66,6 +66,6 @@ Before submitting a pull request, make sure all tests pass.
 
 ## Additional Notes
 
-- Please review our [Security Policy](?tab=security-ov-file).
+- Please review our [Security Policy](/security/policy).
 - Start or join a [discussion](/discussions) if you have questions.
 - Thanks again for your contributions!
