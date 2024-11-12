@@ -1,12 +1,18 @@
+name: Docker Image
+
 on:
   workflow_call:
   push:
     branches:
       - master
-name: Docker Image
+      
+permissions:
+  packages: write
+
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  
 jobs:
   docker:
     name: Docker Image
@@ -31,7 +37,7 @@ jobs:
     - name: Login to Docker registry
       uses: docker/login-action@v3
       with:
-        registry: ghcr.io
+        registry: ${{ env.REGISTRY }}
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Build and push
