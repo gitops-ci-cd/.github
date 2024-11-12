@@ -2,7 +2,12 @@ on:
   push:
     branches:
       - $default-branch
+
 name: Docker Image
+
+permissions:
+  packages: write
+  
 jobs:
   docker:
     uses: dudo/.github/.github/workflows/docker_image.yml@main
