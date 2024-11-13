@@ -4,15 +4,15 @@ This document describes the deployment workflow for applications using a GitOps-
 
 ## Repositories Structure
 
-1. [app] Repository
+1. [[app]](https://github.com/gitops-ci-cd/acme-node) Repository
 
   	Contains the source code for the application, including any PR-triggered development workflows. Use this template [TODO]().
 
-1. [app]-infra Repository
+1. [[app]-infra](https://github.com/gitops-ci-cd/acme-node-infra) Repository
 
   	Manages infrastructure resources specific to the application, such as databases or storage, keeping infrastructure configuration separate from application code. Use this template [TODO]().
 
-1. [app]-deployment Repository
+1. [[app]-deployment](https://github.com/gitops-ci-cd/acme-node-deployment) Repository
 
     Holds deployment manifests and configuration files for the application. It serves as the single source of truth for deployment configurations. Use this template [TODO]().
 
