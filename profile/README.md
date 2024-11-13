@@ -1,6 +1,6 @@
 # GitOps CI/CD Pipeline Overview
 
-This document describes the deployment workflow for applications using a GitOps-based approach with [Argo CD](https://argo-cd.readthedocs.io/en/stable/) and [GitHub Actions](https://docs.github.com/en/actions), leveraging separate repositories for application code, infrastructure configuration, and deployment logic.
+This organization provides reference implementations for applications that are Continuously Integrated and Deployed using a GitOps-based approach via [Argo CD](https://argo-cd.readthedocs.io/en/stable/) and [GitHub Actions](https://docs.github.com/en/actions), leveraging separate repositories for application code, infrastructure configuration, and deployment logic.
 
 ## Repositories Structure
 
@@ -36,7 +36,7 @@ This document describes the deployment workflow for applications using a GitOps-
 1. Feature Development and Pull Requests
 
     - Developers work in feature branches within the app repository.
-    - When a pull request (PR) is opened, a GitHub Action initiates testing and linting.
+    - When a pull request (PR) is opened, a GitHub Action initiates linting and unit testing.
 
 1. Automatic Preview Deployments
 
