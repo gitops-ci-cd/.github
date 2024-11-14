@@ -4,32 +4,30 @@ This organization provides reference implementations for applications that are C
 
 ## Repositories Structure
 
-1. [[app]](https://github.com/gitops-ci-cd/acme-node) Repository
+- [[app]](https://github.com/gitops-ci-cd/acme-node) Repository
 
   	Contains the source code for the application, including any PR-triggered development workflows. Use this template [TODO]().
 
-1. [[app]-infra](https://github.com/gitops-ci-cd/acme-node-infra) Repository
+- [[app]-infra](https://github.com/gitops-ci-cd/acme-node-infra) Repository
 
   	Manages infrastructure resources specific to the application, such as databases or storage, keeping infrastructure configuration separate from application code. Use this template [TODO]().
 
-1. [[app]-deployment](https://github.com/gitops-ci-cd/acme-node-deployment) Repository
+- [[app]-deployment](https://github.com/gitops-ci-cd/acme-node-deployment) Repository
 
     Holds deployment manifests and configuration files for the application. It serves as the single source of truth for deployment configurations. Use this template [TODO]().
 
-1. [.github](https://github.com/gitops-ci-cd/.github) Repository
+- [.github](https://github.com/gitops-ci-cd/.github) Repository
 
-    Special repository within GitHub that provides functionality across the organization
+    This is a special repository within GitHub that provides functionality across the organization.
 
     - [Customizing Organization Profile](https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/customizing-your-organizations-profile)
     - [Creating Default Community Health Files](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/creating-a-default-community-health-file)
     - [GitHub Action Workflow Templates](https://docs.github.com/en/actions/sharing-automations/creating-workflow-templates-for-your-organization)
     - [Reusing GitHub Action Workflows](https://docs.github.com/en/actions/sharing-automations/reusing-workflows)
 
-1. [.github-private](https://github.com/gitops-ci-cd/.github-private) Repository
+- [.github-private](https://github.com/gitops-ci-cd/.github-private) Repository
 
-    Special repository within GitHub that extends profile customization
-
-    - [Customizing Organization Profile](https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/customizing-your-organizations-profile#adding-a-member-only-organization-profile-readme)
+    This is another special repository within GitHub that [extends profile customization](https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/customizing-your-organizations-profile#adding-a-member-only-organization-profile-readme).
 
 ## Development Workflow
 
