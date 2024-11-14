@@ -6,15 +6,21 @@ This organization provides reference implementations for applications that are C
 
 - [[app]](https://github.com/gitops-ci-cd/acme-node) Repository
 
-  	Contains the source code for the application, including any PR-triggered development workflows. Use this template [TODO]().
+  	Contains the source code for the application, including any workflows. Implements a simple api that responds to [/hello](http://localhost:8080/hello).
+
+    Use this template [TODO]().
 
 - [[app]-infra](https://github.com/gitops-ci-cd/acme-node-infra) Repository
 
-  	Manages infrastructure resources specific to the application, such as databases or storage, keeping infrastructure configuration separate from application code. Use this template [TODO]().
+  	Manages infrastructure resources specific to the application, such as databases or storage, keeping infrastructure configuration separate from application code.
+
+    Use this template [TODO]().
 
 - [[app]-deployment](https://github.com/gitops-ci-cd/acme-node-deployment) Repository
 
-    Holds deployment manifests and configuration files for the application. It serves as the single source of truth for deployment configurations. Use this template [TODO]().
+    Holds deployment manifests and configuration files for the application. It serves as the single source of truth for deployment configurations.
+
+    Use this template [TODO]().
 
 - [.github](https://github.com/gitops-ci-cd/.github) Repository
 
