@@ -120,11 +120,11 @@ flowchart TD
 
 ## Summary
 
-This pipeline leverages GitOps principles and automated deployments to ensure a streamlined, consistent deployment process:
+These pipelines leverages GitOps principles and automated deployments to ensure a streamlined, consistent deployment process:
 
 - Preview environments for each PR with isolated, PR-specific deployments.
 - Automated versioning and tagging upon merging to main, ensuring each production release is traceable.
 - Argo CD Image Updater PRs to enforce review controls for production changes or enable auto-rollouts.
 - GitHub Deployment Statuses reflect the deployment’s lifecycle, from feature development through production deployment, providing continuous feedback and visibility.
 
-This structure combines GitOps with automated CI/CD workflows, providing both flexibility and control over each stage of deployment, while ensuring the system remains fully traceable, auditable, and Git-centered.
+The repositories herein combine GitOps with automated CI/CD workflows, providing both flexibility and control over each stage of deployment, while ensuring the system remains fully traceable, auditable, and GitHub-centered.
