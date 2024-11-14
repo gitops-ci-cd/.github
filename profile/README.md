@@ -49,6 +49,32 @@ This organization provides reference implementations for applications that are C
 
     - Once the PR is approved and merged to main, a GitHub Action builds a production-ready image, tags/releases the repo, and triggers a [deployment](https://docs.github.com/en/rest/deployments/deployments) workflow targeting production.
     - The release serves as an artifact of the build, versioned and traceable for production use.
+  
+```mermaid
+flowchart TD
+
+    registry[GitHub Container Registry]
+
+    subgraph env[Ephemeral Environment]
+        argo[Argo CD]
+        argo-app[Argo ApplicationSet]
+    end
+
+    subgraph dev[Development Workflow]
+        app -- pull_request --> pr[Pull Request]
+        pr -- synchronize --> lint[Lint] & test[Test]
+        pr -- labeled --> deployment[GitHub Deployment] -- deployment --> deployment-status[GitHub Deployment Status]
+        deployment-status -- deployment_status --> build[Docker Image]
+        build --> registry
+
+        env
+        argo-app -- 1 --o registry
+        argo-app ---o app-deployment
+        argo -- 2 --> deployment-status
+
+        pr -- closed --> app
+    end
+```
 
 ## Production Deployment Workflow
 
@@ -61,6 +87,36 @@ This organization provides reference implementations for applications that are C
 
     - Upon merging to main, Argo CD picks up the updated deployment configuration and rolls out the new image to the production environment.
     - [Argo's Notification tooling](https://argo-cd.readthedocs.io/en/stable/operator-manual/notifications/) then sends [deployment status updates to GitHub](https://docs.github.com/en/rest/deployments/deployments), notifying the deployment with statuses `in_progress`, `success`, `failure`, or `error`.
+
+```mermaid
+flowchart TD
+
+    registry[GitHub Container Registry]
+
+    subgraph env[Production Environment]
+        argo[Argo CD]
+        argo-image-updater[Argo CD Image Updater]
+        argo-app[Argo Application]
+    end
+
+    subgraph prod[Production Workflow]
+        app -- push --> release[Tag/Release]
+        release -- publish --> deployment[GitHub Deployment] -- deployment --> deployment-status[GitHub Deployment Status]
+        deployment-status -- deployment_status --> build[Docker Image]
+        build --> registry
+
+        env
+        argo-image-updater -- 1 --o registry
+        argo-image-updater -- 2 --> app-deployment
+
+        app-deployment -- pull_request --> pr[Pull Request]
+        pr -- synchronize --> validate[Validate]
+        pr -- closed --> app-deployment
+
+        argo-app -- 3 --o app-deployment
+        argo -- 4 --> deployment-status
+    end
+```
 
 ## Summary
 
