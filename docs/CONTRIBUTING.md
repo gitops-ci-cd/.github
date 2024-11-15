@@ -42,26 +42,29 @@ Submit a [feature request](/issues/new/choose).
 
 ## Setting Up Your Environment
 
-- Install [Docker Desktop](https://docs.docker.com/desktop/).
-- Clone the repository.
+- Install [Brew](https://brew.sh/)
+- Install [Docker Desktop](https://docs.docker.com/desktop/)
+- Clone the repository and `cd` into the project directory.
 - Run the following commands to set up your environment:
-  
+
     ```sh
-    task -- install
-    task up
+    brew bundle # refer to Brewfile for dependencies
+
+    docker compose run --rm install
+    docker compose watch
     ```
 
 ## Coding Standards
 
-- Follow any style guidelines set by this project (e.g., Prettier, ESLint) by using `task lint`.
+- Follow any style guidelines set by this project (e.g., Prettier, ESLint) by using `docker compose run --rm lint`.
 - Keep code readable and well-documented.
 - Use consistent naming conventions and clean architecture.
 
 ## Testing
 
-Before submitting a pull request, make sure all tests pass.
+Before submitting a pull request, make sure all tests pass, locally, though CI should catch failures.
 
-- Run tests using `task test`.
+- Run tests using `docker compose run --rm test`.
 - Add new tests if you introduce a new feature or fix a bug.
 
 ## Additional Notes
