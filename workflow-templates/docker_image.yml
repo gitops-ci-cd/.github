@@ -7,7 +7,9 @@ name: Docker Image
 
 permissions:
   packages: write
+  attestations: write
+  id-token: write
   
 jobs:
   docker:
-    uses: dudo/.github/.github/workflows/docker_image.yml@main
+    uses: gitops-ci-cd/.github/.github/workflows/docker_image.yml@main
