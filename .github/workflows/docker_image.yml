@@ -1,3 +1,6 @@
+# https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions
+# https://docs.github.com/en/actions/use-cases-and-examples/publishing-packages/publishing-docker-images
+
 on:
   workflow_call:
   push:
@@ -5,7 +8,10 @@ on:
       - master
 
 permissions:
+  contents: read
   packages: write
+  attestations: write
+  id-token: write
 
 name: Docker Image
 
@@ -43,6 +49,7 @@ jobs:
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Build and push
+      id: push
       uses: docker/build-push-action@v6
       with:
         push: true
@@ -52,3 +59,10 @@ jobs:
         labels: ${{ steps.meta.outputs.labels }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
+    - name: Generate artifact attestation
+      uses: actions/attest-build-provenance@v1
+      with:
+        subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
+        subject-digest: ${{ steps.push.outputs.digest }}
+        push-to-registry: true
+        
