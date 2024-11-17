@@ -63,8 +63,8 @@ This organization provides reference implementations for applications that are C
 
     ```mermaid
     flowchart LR
-        url_foo[foo.sandbox.acme.inc]
-        url_bar[bar.sandbox.acme.inc]
+        url_foo[foo.sandbox.acme.inc]:::foo
+        url_bar[bar.sandbox.acme.inc]:::bar
         url_sandbox[sandbox.acme.inc]
 
         url_sandbox --> a
