@@ -10,20 +10,6 @@ This organization provides reference implementations for applications that are C
 
   Use this template [TODO]().
 
-- [[app]-infra](https://github.com/gitops-ci-cd/acme-node-infra) Repository
-
-  Manages infrastructure resources specific to the application, such as storage or queues, keeping infrastructure configuration separate from application code.
-
-  Use this template [TODO]().
-
-- [[app]-addon](https://github.com/gitops-ci-cd/node-feature-discovery-addon) Repository
-
-  Manages Kubernetes addons and configurations that enhance the cluster's functionality. These repositories are auto discovered by Argo CD for continuous deployment to all clusters. See [argo-config](https://github.com/gitops-ci-cd/argo-config/blob/main/app-of-apps/addons/) for more information.
-
-  Use this template [TODO]().
-
-  ![image](https://github.com/user-attachments/assets/ca98b4ff-7d16-4b15-9151-89f938497fde)
-
 - [[app]-deployment](https://github.com/gitops-ci-cd/acme-node-deployment) Repository
 
   Holds deployment manifests and configuration files for the application. These repositories are auto discovered by Argo CD for continuous deployment to their applicable environments. See [argo-config](https://github.com/gitops-ci-cd/argo-config/blob/main/app-of-apps/apps/) for more information.
@@ -31,6 +17,20 @@ This organization provides reference implementations for applications that are C
   Use this template [TODO]().
 
   ![image](https://github.com/user-attachments/assets/e14defec-e13b-4779-9a53-ba1ca1af300e)
+
+- [[app]-infra](https://github.com/gitops-ci-cd/acme-node-infra) Repository
+
+  Manages infrastructure resources specific to the application, such as storage or queues, keeping infrastructure configuration separate from application code.
+
+  Use this template [TODO]().
+
+- [[tool]-addon](https://github.com/gitops-ci-cd/node-feature-discovery-addon) Repository
+
+  Manages Kubernetes addons and configurations that enhance a cluster's functionality. These repositories are auto discovered by Argo CD for continuous deployment to all clusters. See [argo-config](https://github.com/gitops-ci-cd/argo-config/blob/main/app-of-apps/addons/) for more information.
+
+  Use this template [TODO]().
+
+  ![image](https://github.com/user-attachments/assets/ca98b4ff-7d16-4b15-9151-89f938497fde)
 
 - [.github](https://github.com/gitops-ci-cd/.github) Repository
 
