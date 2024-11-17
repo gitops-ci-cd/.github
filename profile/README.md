@@ -92,7 +92,7 @@ flowchart TD
     end
 ```
 
-## Production Deployment Workflow
+## Production Workflow
 
 1. New Image Detection
 
