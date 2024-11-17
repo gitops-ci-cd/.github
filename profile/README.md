@@ -73,24 +73,33 @@ This organization provides reference implementations for applications that are C
             d[Service D
                 main]
 
-            a ==> b ==> c ==> d
+            a --> b --> c --> d
         end
 
         subgraph foo[Preview Env]
             a_foo[Service A
-                foo]
+                foo]:::foo
             c_foo[Service C
-                foo]
+                foo]:::foo
 
             a_foo -.-> b -.-> c_foo -.-> d
+
+
         end
 
         subgraph bar[Preview Env]
             b_bar[Serice B
-                bar]
+                bar]:::bar
 
             a -.-> b_bar -.-> c -.-> d
         end
+
+        classDef foo stroke:red
+        classDef bar stroke:blue
+
+        linkStyle 0,1,2 stroke-width:4px;
+        linkStyle 3,4,5 stroke-width:2px,stroke:red;
+        linkStyle 6,7,8 stroke-width:2px,stroke:blue;
     ```
 
 1. Releasing to Production
