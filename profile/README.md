@@ -57,7 +57,42 @@ This organization provides reference implementations for applications that are C
     - The [Argo CD PR Generator](https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Generators-Pull-Request/) detects PRs labeled with "preview" and generates a preview environment for the specific PR branch.
     - The PR-specific environment allows for isolated testing and review.
     - Upon successful deployment, [Argo's Notification tooling](https://argo-cd.readthedocs.io/en/stable/operator-manual/notifications/) sends [deployment status updates to GitHub](https://docs.github.com/en/rest/deployments/deployments), notifying the PR's deployment with statuses `in_progress`, `success`, `failure`, or `error` for real-time feedback on the preview environment.
-    - The preview deployment is torn down upon removing the aformentioned label or closing the PR.
+    - The preview deployment is torn down upon removing the aforementioned label or closing the PR.
+
+Requests made via the subdomains matching the PR are routed to the preview environment, allowing for easy access to the Preview deployment.
+
+```mermaid
+flowchart LR
+    subgraph main[Sandbox Env]
+        a[Service A
+            main]
+        b[Service B
+            main]
+        c[Service C
+            main]
+        d[Service D
+            main]
+
+        a ==> b ==> c ==> d
+    end
+
+    subgraph foo[Preview Env]
+        a_foo[Service A
+            foo]
+        c_foo[Service C
+            foo]
+
+        a_foo -.-> b -.-> c_foo -.-> d
+    end
+
+    subgraph bar[Preview Env]
+        b_bar[Serice B
+            bar]
+
+        a -.-> b_bar -.-> c -.-> d
+    end
+
+```
 
 1. Releasing to Production
 
