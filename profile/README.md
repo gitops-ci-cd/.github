@@ -63,6 +63,12 @@ This organization provides reference implementations for applications that are C
 
     ```mermaid
     flowchart LR
+        url_foo[foo.sandbox.acme.inc]
+        url_bar[bar.sandbox.acme.inc]
+        url_sandbox[sandbox.acme.inc]
+
+        url_sandbox --> a
+
         subgraph main[Sandbox Env]
             a[Service A
                 main]
@@ -76,6 +82,8 @@ This organization provides reference implementations for applications that are C
             a --> b --> c --> d
         end
 
+        url_foo -.-> a_foo
+
         subgraph foo[Preview Env]
             a_foo[Service A
                 foo]:::foo
@@ -83,9 +91,9 @@ This organization provides reference implementations for applications that are C
                 foo]:::foo
 
             a_foo -.-> b -.-> c_foo -.-> d
-
-
         end
+
+        url_bar -.-> a
 
         subgraph bar[Preview Env]
             b_bar[Serice B
@@ -94,12 +102,12 @@ This organization provides reference implementations for applications that are C
             a -.-> b_bar -.-> c -.-> d
         end
 
-        classDef foo stroke:red
-        classDef bar stroke:blue
+        classDef foo stroke:red;
+        classDef bar stroke:blue;
 
-        linkStyle 0,1,2 stroke-width:4px;
-        linkStyle 3,4,5 stroke-width:2px,stroke:red;
-        linkStyle 6,7,8 stroke-width:2px,stroke:blue;
+        linkStyle 0,1,2,3 stroke-width:4px;
+        linkStyle 4,5,6,7 stroke-width:2px,stroke:red;
+        linkStyle 8,9,10,11 stroke-width:2px,stroke:blue;
     ```
 
 1. Releasing to Production
