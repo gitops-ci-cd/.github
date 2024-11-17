@@ -24,7 +24,7 @@ This organization provides reference implementations for applications that are C
 
   Use this template [TODO]().
 
-- [[tool]-addon](https://github.com/gitops-ci-cd/node-feature-discovery-addon) Repository
+- [[tool]-addon](https://github.com/gitops-ci-cd/gateway-api-addon) Repository
 
   Manages Kubernetes addons and configurations that enhance a cluster's functionality. These repositories are auto discovered by Argo CD for continuous deployment to all clusters. See [argo-config](https://github.com/gitops-ci-cd/argo-config/blob/main/app-of-apps/addons/) for more information.
 
