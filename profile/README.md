@@ -32,10 +32,10 @@ This organization provides reference implementations for applications that are C
 
     This is a special repository within GitHub that provides functionality across the organization.
 
-      - [Customizing Organization Profile](https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/customizing-your-organizations-profile)
-      - [Creating Default Community Health Files](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/creating-a-default-community-health-file)
-      - [GitHub Action Workflow Templates](https://docs.github.com/en/actions/sharing-automations/creating-workflow-templates-for-your-organization)
-      - [Reusing GitHub Action Workflows](https://docs.github.com/en/actions/sharing-automations/reusing-workflows)
+    - [Customizing Organization Profile](https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/customizing-your-organizations-profile)
+    - [Creating Default Community Health Files](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/creating-a-default-community-health-file)
+    - [GitHub Action Workflow Templates](https://docs.github.com/en/actions/sharing-automations/creating-workflow-templates-for-your-organization)
+    - [Reusing GitHub Action Workflows](https://docs.github.com/en/actions/sharing-automations/reusing-workflows)
 
 - [.github-private](https://github.com/gitops-ci-cd/.github-private) Repository
 
@@ -62,31 +62,31 @@ This organization provides reference implementations for applications that are C
 
 This flowchart provides some insight into the "pipeline" of events that trigger CI and CD. The numbers represent the order that deployments happen.
 
-    ```mermaid
-    flowchart TD
+```mermaid
+flowchart TD
 
-        registry[GitHub Container Registry]
+    registry[GitHub Container Registry]
 
-        subgraph env[Ephemeral Environment]
-            argo[Argo CD]
-            argo-app[Argo ApplicationSet]
-        end
+    subgraph env[Ephemeral Environment]
+        argo[Argo CD]
+        argo-app[Argo ApplicationSet]
+    end
 
-        subgraph dev[Development Workflow]
-            app -- pull_request --> pr[Pull Request]
-            pr -- synchronize --> lint[Lint] & test[Test]
-            pr -- labeled --> deployment[GitHub Deployment] -- deployment --> deployment-status[GitHub Deployment Status]
-            deployment-status -- deployment_status --> build[Docker Image]
-            build --> registry
+    subgraph dev[Development Workflow]
+        app -- pull_request --> pr[Pull Request]
+        pr -- synchronize --> lint[Lint] & test[Test]
+        pr -- labeled --> deployment[GitHub Deployment] -- deployment --> deployment-status[GitHub Deployment Status]
+        deployment-status -- deployment_status --> build[Docker Image]
+        build --> registry
 
-            env
-            argo-app -- 1 --o registry
-            argo-app ---o app-deployment
-            argo -- 2 --> deployment-status
+        env
+        argo-app -- 1 --o registry
+        argo-app ---o app-deployment
+        argo -- 2 --> deployment-status
 
-            pr -- closed --> app
-        end
-    ```
+        pr -- closed --> app
+    end
+```
 
 ## Production Deployment Workflow
 
@@ -102,35 +102,35 @@ This flowchart provides some insight into the "pipeline" of events that trigger 
 
 This flowchart provides some insight into the "pipeline" of events that trigger CI and CD. The numbers represent the order that deployments happen.
 
-    ```mermaid
-    flowchart TD
+```mermaid
+flowchart TD
 
-        registry[GitHub Container Registry]
+    registry[GitHub Container Registry]
 
-        subgraph env[Production Environment]
-            argo[Argo CD]
-            argo-image-updater[Argo CD Image Updater]
-            argo-app[Argo Application]
-        end
+    subgraph env[Production Environment]
+        argo[Argo CD]
+        argo-image-updater[Argo CD Image Updater]
+        argo-app[Argo Application]
+    end
 
-        subgraph prod[Production Workflow]
-            app -- push --> release[Tag/Release]
-            release -- publish --> deployment[GitHub Deployment] -- deployment --> deployment-status[GitHub Deployment Status]
-            deployment-status -- deployment_status --> build[Docker Image]
-            build --> registry
+    subgraph prod[Production Workflow]
+        app -- push --> release[Tag/Release]
+        release -- publish --> deployment[GitHub Deployment] -- deployment --> deployment-status[GitHub Deployment Status]
+        deployment-status -- deployment_status --> build[Docker Image]
+        build --> registry
 
-            env
-            argo-image-updater -- 1 --o registry
-            argo-image-updater -- 2 --> app-deployment
+        env
+        argo-image-updater -- 1 --o registry
+        argo-image-updater -- 2 --> app-deployment
 
-            app-deployment -- pull_request --> pr[Pull Request]
-            pr -- synchronize --> validate[Validate]
-            pr -- closed --> app-deployment
+        app-deployment -- pull_request --> pr[Pull Request]
+        pr -- synchronize --> validate[Validate]
+        pr -- closed --> app-deployment
 
-            argo-app -- 3 --o app-deployment
-            argo -- 4 --> deployment-status
-        end
-    ```
+        argo-app -- 3 --o app-deployment
+        argo -- 4 --> deployment-status
+    end
+```
 
 ## Summary
 
