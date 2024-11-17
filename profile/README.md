@@ -54,7 +54,7 @@ This organization provides reference implementations for applications that are C
 
 1. Automatic Preview Deployments
 
-    - The [Argo CD PR Generator](https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Generators-Pull-Request/) detects PRs labeled with "ephemeral" and generates a preview environment for the specific PR branch.
+    - The [Argo CD PR Generator](https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Generators-Pull-Request/) detects PRs labeled with "preview" and generates a preview environment for the specific PR branch.
     - The PR-specific environment allows for isolated testing and review.
     - Upon successful deployment, [Argo's Notification tooling](https://argo-cd.readthedocs.io/en/stable/operator-manual/notifications/) sends [deployment status updates to GitHub](https://docs.github.com/en/rest/deployments/deployments), notifying the PR's deployment with statuses `in_progress`, `success`, `failure`, or `error` for real-time feedback on the preview environment.
     - The preview deployment is torn down upon removing the aformentioned label or closing the PR.
@@ -71,7 +71,7 @@ flowchart TD
 
     registry[GitHub Container Registry]
 
-    subgraph env[Ephemeral Environment]
+    subgraph env[Preview Environment]
         argo[Argo CD]
         argo-app[Argo ApplicationSet]
     end
