@@ -9,7 +9,7 @@ permissions:
 name: Release Repository
 
 jobs:
-  tag:
+  release:
     uses: gitops-ci-cd/.github/.github/workflows/release.yaml@main
     with:
       version: ${{ github.ref }}

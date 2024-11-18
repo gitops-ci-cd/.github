@@ -22,4 +22,4 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ inputs.version }}
         run: |
-          gh release create "v${VERSION}" --title "Version ${VERSION}" --notes "Release version ${VERSION}" --target ${{ github.sha }}
+          gh release create "v${VERSION}" --title "Version ${VERSION}" --notes "Release version ${VERSION}" --verify-tag --target ${{ github.sha }}
