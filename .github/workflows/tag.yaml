@@ -49,5 +49,5 @@ jobs:
         env:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
-          git tag -a v$VERSION
+          git tag -a v$VERSION -m "Tagged from GitHub Actions"
           git push origin v$VERSION
