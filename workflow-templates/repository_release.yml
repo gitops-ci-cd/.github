@@ -1,0 +1,15 @@
+on:
+  push:
+    tags:
+      - v*
+
+permissions:
+  contents: write
+
+name: Release Repository
+
+jobs:
+  tag:
+    uses: gitops-ci-cd/.github/.github/workflows/release.yaml@main
+    with:
+      version: ${{ github.ref }}

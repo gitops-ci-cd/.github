@@ -1,0 +1,53 @@
+# https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions
+
+on:
+  workflow_call:
+
+permissions:
+  contents: write
+
+name: Tag Repository
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+      - name: Detect Version
+        id: version
+        run: |
+          echo "Detecting version..."
+          if [ -f "package.json" ]; then
+            echo "  package.json detected"
+            VERSION=$(jq -r .version package.json)
+          elif [ -f "go.mod" ]; then
+            echo "  go.mod detected"
+            VERSION=$(grep -E '^module' go.mod | awk '{print $2}')
+          elif [ -f "setup.py" ]; then
+            echo "  setup.py detected"
+            VERSION=$(grep -E 'version=' setup.py | sed "s/.*version=['\"]\([^'\"]*\)['\"].*/\1/")
+          elif [ -f "Gemfile.lock" ]; then
+            echo "  Gemfile.lock detected"
+            VERSION=$(grep -E '^[ ]{4}VERSION' Gemfile.lock | awk '{print $2}')
+          elif [ -f "pom.xml" ]; then
+            echo "  pom.xml detected"
+            VERSION=$(grep -oPm1 "(?<=<version>)[^<]+" pom.xml)
+          elif [ -f "*.csproj" ]; then
+            echo "  *.csproj detected"
+            VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" *.csproj)
+          else
+            echo "  Error: No version file detected."
+            exit 1
+          fi
+          echo "  Version found: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      - name: Create and push tag
+        if: success() && steps.version.outputs.version != ''
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          git tag -a v$VERSION
+          git push origin v$VERSION

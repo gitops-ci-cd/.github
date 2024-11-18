@@ -1,0 +1,4 @@
+{
+  "name": "Preview Deployment",
+  "description": "Enable preview deployments for pull requests"
+}

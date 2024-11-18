@@ -1,0 +1,13 @@
+on: deployment
+
+permissions:
+  contents: read
+  packages: write
+  attestations: write
+  id-token: write
+
+name: Build & Push Container Image
+
+jobs:
+  image:
+    uses: gitops-ci-cd/.github/.github/workflows/image.yaml@main

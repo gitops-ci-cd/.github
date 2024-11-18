@@ -1,0 +1,19 @@
+on:
+  release:
+    types:
+      - released
+
+permissions:
+  deployments: write
+
+name: Production Deployment
+
+jobs:
+  production:
+    uses: gitops-ci-cd/.github/.github/workflows/deployment.yaml@main
+    with:
+      environment: production
+  sandbox:
+    uses: gitops-ci-cd/.github/.github/workflows/deployment.yaml@main
+    with:
+      environment: sandbox

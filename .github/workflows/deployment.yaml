@@ -1,0 +1,41 @@
+# https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        description: Environment to deploy to
+        default: production
+
+permissions:
+  deployments: write
+
+concurrency:
+  group: ${{ inputs.environment }}
+  cancel-in-progress: true
+
+name: Deployment
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/github-script@v7
+        env:
+          TARGET_ENV: ${{ inputs.environment }}
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const { TARGET_ENV } = process.env
+            const response = await github.rest.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.payload?.pull_request?.head?.ref || context.sha,
+              required_contexts: [],
+              environment: TARGET_ENV,
+              transient_environment: TARGET_ENV === 'preview',
+              description: `Deploying to ${TARGET_ENV}...`
+            });
+            console.log(`Deployment created with ID: ${response.data.id}`);

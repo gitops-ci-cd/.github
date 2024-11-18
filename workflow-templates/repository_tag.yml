@@ -1,0 +1,20 @@
+on:
+  push:
+    paths-ignore:
+      - .devcontainer/**
+      - .github/**
+      - .vscode/**
+      - .gitignore
+      - Brewfile
+      - README.md
+    branches:
+      - $default-branch
+
+permissions:
+  contents: write
+
+name: Tag Repository
+
+jobs:
+  tag:
+    uses: gitops-ci-cd/.github/.github/workflows/tag.yaml@main
