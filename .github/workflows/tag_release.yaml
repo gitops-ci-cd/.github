@@ -54,8 +54,9 @@ jobs:
           git tag -a v$VERSION -m "Tagged from GitHub Actions"
           git push origin v$VERSION
       - name: Release
+        if: success() && steps.version.outputs.version != ''
         env:
           GH_TOKEN: ${{ github.token }}
-          VERSION: ${{ github.ref }}
+          VERSION: ${{ steps.version.outputs.version }}
         run: |
           gh release create "v${VERSION}" --title "Version ${VERSION}" --notes "Release version ${VERSION}" --target ${{ github.sha }}
