@@ -15,4 +15,4 @@ jobs:
     uses: gitops-ci-cd/.github/.github/workflows/deployment.yaml@main
     with:
       environment: preview
-      secrets: inherit
+    secrets: inherit
