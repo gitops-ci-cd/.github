@@ -24,7 +24,7 @@ This organization provides reference implementations for applications that are C
 
   Use this template [TODO]().
 
-- [[tool]-addon](https://github.com/gitops-ci-cd/node-feature-discovery-addon) Repository
+- [[tool]-addon](https://github.com/gitops-ci-cd/gateway-api-addon) Repository
 
   Manages Kubernetes addons and configurations that enhance a cluster's functionality. These repositories are auto discovered by Argo CD for continuous deployment to all clusters. See [argo-config](https://github.com/gitops-ci-cd/argo-config/blob/main/app-of-apps/addons/) for more information.
 
@@ -63,8 +63,8 @@ This organization provides reference implementations for applications that are C
 
     ```mermaid
     flowchart LR
-        url_foo[foo.sandbox.acme.inc]
-        url_bar[bar.sandbox.acme.inc]
+        url_foo[foo.sandbox.acme.inc]:::foo
+        url_bar[bar.sandbox.acme.inc]:::bar
         url_sandbox[sandbox.acme.inc]
 
         url_sandbox --> a
@@ -130,8 +130,8 @@ flowchart TD
     subgraph dev[Development Workflow]
         app -- pull_request --> pr[Pull Request]
         pr -- synchronize --> lint[Lint] & test[Test]
-        pr -- labeled --> deployment[GitHub Deployment] -- deployment --> deployment-status[GitHub Deployment Status]
-        deployment-status -- deployment_status --> build[Docker Image]
+        pr -- labeled --> deployment[GitHub Deployment] --> deployment-status[GitHub Deployment Status]
+        deployment -- deployment --> build[Docker Image]
         build --> registry
 
         env
@@ -169,9 +169,9 @@ flowchart TD
     end
 
     subgraph prod[Production Workflow]
-        app -- push --> release[Tag/Release]
-        release -- publish --> deployment[GitHub Deployment] -- deployment --> deployment-status[GitHub Deployment Status]
-        deployment-status -- deployment_status --> build[Docker Image]
+        app -- push --> tag[Tag/Release]
+        tag -- release --> deployment[GitHub Deployment] --> deployment-status[GitHub Deployment Status]
+        deployment -- deployment --> build[Docker Image]
         build --> registry
 
         env
