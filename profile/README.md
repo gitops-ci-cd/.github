@@ -130,8 +130,8 @@ flowchart TD
     subgraph dev[Development Workflow]
         app -- pull_request --> pr[Pull Request]
         pr -- synchronize --> lint[Lint] & test[Test]
-        pr -- labeled --> deployment[GitHub Deployment] -- deployment --> deployment-status[GitHub Deployment Status]
-        deployment-status -- deployment_status --> build[Docker Image]
+        pr -- labeled --> deployment[GitHub Deployment] --> deployment-status[GitHub Deployment Status]
+        deployment -- deployment --> build[Docker Image]
         build --> registry
 
         env
