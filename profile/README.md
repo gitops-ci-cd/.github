@@ -169,9 +169,9 @@ flowchart TD
     end
 
     subgraph prod[Production Workflow]
-        app -- push --> release[Tag/Release]
-        release -- publish --> deployment[GitHub Deployment] -- deployment --> deployment-status[GitHub Deployment Status]
-        deployment-status -- deployment_status --> build[Docker Image]
+        app -- push --> tag[Tag/Release]
+        tag -- release --> deployment[GitHub Deployment] --> deployment-status[GitHub Deployment Status]
+        deployment -- deployment --> build[Docker Image]
         build --> registry
 
         env
