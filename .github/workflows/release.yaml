@@ -15,7 +15,7 @@ permissions:
 name: Release Repository
 
 jobs:
-  gh_release:
+  create:
     runs-on: ubuntu-latest
     steps:
       - env:

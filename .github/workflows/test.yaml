@@ -24,6 +24,5 @@ jobs:
           push: false
           cache-from: type=gha
           cache-to: type=gha,mode=max
-      - run: docker compose run --rm npm ci
-      - run: ls -la node_modules
+      - run: docker compose run --rm install
       - run: docker compose run --rm test

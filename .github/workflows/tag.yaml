@@ -9,7 +9,7 @@ permissions:
 name: Tag Repository
 
 jobs:
-  git_tag_push:
+  tag_push:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

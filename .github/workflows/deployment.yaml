@@ -18,7 +18,7 @@ concurrency:
 name: Deployment
 
 jobs:
-  create_deployment:
+  create:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     steps:
