@@ -12,7 +12,7 @@ env:
   NODE_ENV: development
 
 jobs:
-  test:
+  docker_compose_test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

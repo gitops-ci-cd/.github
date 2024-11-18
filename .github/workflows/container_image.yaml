@@ -21,7 +21,7 @@ env:
 name: Build & Push Container Image
 
 jobs:
-  image:
+  build_push:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

@@ -9,7 +9,7 @@ permissions:
 name: Lint
 
 jobs:
-  lint:
+  docker_compose_lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
