@@ -13,7 +13,9 @@ jobs:
     uses: gitops-ci-cd/.github/.github/workflows/deployment.yaml@main
     with:
       environment: production
+      secrets: inherit
   sandbox:
     uses: gitops-ci-cd/.github/.github/workflows/deployment.yaml@main
     with:
       environment: sandbox
+      secrets: inherit

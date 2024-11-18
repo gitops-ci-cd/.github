@@ -7,6 +7,10 @@ on:
         type: string
         description: Environment to deploy to
         default: production
+    secrets:
+      PAT:
+        description: Personal Access Token (PAT) used to authenticate with GitHub
+        required: true
 
 permissions:
   deployments: write
@@ -26,7 +30,7 @@ jobs:
         env:
           TARGET_ENV: ${{ inputs.environment }}
         with:
-          github-token: ${{ github.token }}
+          github-token: ${{ secrets.PAT }}
           script: |
             const { TARGET_ENV } = process.env
             const response = await github.rest.repos.createDeployment({

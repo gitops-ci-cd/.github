@@ -13,8 +13,9 @@ on:
 permissions:
   contents: write
 
-name: Tag & Release Repository
+name: Tag Repository
 
 jobs:
   tag:
-    uses: gitops-ci-cd/.github/.github/workflows/tag_release.yaml@main
+    uses: gitops-ci-cd/.github/.github/workflows/tag.yaml@main
+    secrets: inherit
