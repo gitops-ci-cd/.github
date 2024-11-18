@@ -10,4 +10,4 @@ name: Build & Push Container Image
 
 jobs:
   image:
-    uses: gitops-ci-cd/.github/.github/workflows/image.yaml@main
+    uses: gitops-ci-cd/.github/.github/workflows/container_image.yaml@main
