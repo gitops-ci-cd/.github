@@ -2,9 +2,6 @@ name: Release
 description: Tags and releases a repository
 
 inputs:
-  token:
-    description: The GitHub token to use for authentication
-    required: true
   sha:
     description: The commit SHA to tag and release
     required: true
@@ -45,7 +42,7 @@ runs:
     - name: Create release
       if: success() && steps.version.outputs.version != ''
       env:
-        GH_TOKEN: ${{ inputs.token }}
+        GH_TOKEN: ${{ github.token }}
         VERSION: ${{ steps.version.outputs.version }}
         SHA: ${{ inputs.sha }}
       shell: bash
