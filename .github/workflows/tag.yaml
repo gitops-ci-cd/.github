@@ -17,16 +17,16 @@ jobs:
   tag_push:
     runs-on: ubuntu-latest
     steps:
+
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT }}
+          # persist-credentials: false
       - env:
           EMAIL: "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email $EMAIL
-          git remote set-url origin https://x-access-token:${{ secrets.PAT }}@github.com/${{ github.repository }}
-      - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.PAT }}
-          persist-credentials: false
       - name: Detect Version
         id: version
         run: |
