@@ -26,6 +26,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.PAT }}
+          persist-credentials: false
       - name: Detect Version
         id: version
         run: |
