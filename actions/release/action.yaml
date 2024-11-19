@@ -42,7 +42,7 @@ runs:
     - name: Create release
       if: success() && steps.version.outputs.version != ''
       env:
-        GH_TOKEN: ${{ github.token }}
+        GH_TOKEN: ${{ env.GITHUB_TOKEN }}
         VERSION: ${{ steps.version.outputs.version }}
         SHA: ${{ inputs.sha }}
       shell: bash
