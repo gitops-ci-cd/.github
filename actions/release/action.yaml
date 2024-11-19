@@ -47,4 +47,7 @@ runs:
         SHA: ${{ inputs.sha }}
       shell: bash
       run: |
-        gh release create "v${VERSION}" --title "Version ${VERSION}" --notes "Released via GitHub Actions" --target $SHA
+        gh release create "v${VERSION}" \
+          --title "Version ${VERSION}" \
+          --notes "Released via GitHub Actions" \
+          --target $SHA
