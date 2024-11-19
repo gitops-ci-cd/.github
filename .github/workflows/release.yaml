@@ -4,10 +4,7 @@
 
 on:
   workflow_call:
-    secrets:
-      PAT:
-        description: Personal Access Token (PAT) used to authenticate with GitHub
-        required: true
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -17,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - env:
-          GH_TOKEN: ${{ secrets.PAT }}
+          GH_TOKEN: ${{ github.token }}
           VERSION: ${{ github.ref }}
           SHA: ${{ github.sha }}
         run: |
