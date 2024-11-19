@@ -20,7 +20,6 @@ name: Deployment
 jobs:
   create:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
     steps:
       - uses: actions/github-script@v7
         env:
