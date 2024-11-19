@@ -29,7 +29,7 @@ jobs:
           script: |
             const { TARGET_ENV } = process.env
             console.log(`Deploying to ${TARGET_ENV}...`);
-            console.log('context', context);
+            console.log('pull_request', context.payload?.pull_request);
             const response = await github.rest.repos.createDeployment({
               owner: context.repo.owner,
               repo: context.repo.repo,
