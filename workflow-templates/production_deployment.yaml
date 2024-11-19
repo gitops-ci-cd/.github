@@ -1,21 +1,44 @@
 on:
-  release:
-    types:
-      - released
+  push:
+    paths-ignore:
+      - .devcontainer/**
+      - .github/**
+      - .vscode/**
+      - .gitignore
+      - Brewfile
+      - README.md
+    branches:
+      - $default-branch
 
 permissions:
+  contents: write
+  packages: write
+  attestations: write
+  id-token: write
   deployments: write
 
 name: Production Deployment
 
 jobs:
-  production:
+  deploy_production:
     uses: gitops-ci-cd/.github/.github/workflows/deployment.yaml@main
     with:
       environment: production
-    secrets: inherit
-  sandbox:
+
+  deploy_sandbox:
+    needs: deploy_production
     uses: gitops-ci-cd/.github/.github/workflows/deployment.yaml@main
     with:
       environment: sandbox
-    secrets: inherit
+
+  build:
+    needs: deploy_production
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gitops-ci-cd/.github/actions/release@main
+        with:
+          sha: ${{ github.sha }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - uses: gitops-ci-cd/.github/actions/build@main

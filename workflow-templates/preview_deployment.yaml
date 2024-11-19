@@ -5,14 +5,23 @@ on:
       - synchronize
 
 permissions:
+  contents: read
+  packages: write
+  id-token: write
   deployments: write
 
 name: Preview Deployment
 
 jobs:
-  deployment:
+  deploy_preview:
     if: github.event.action == 'labeled' && github.event.label.name == 'preview' || github.event.action == 'synchronize' && contains(github.event.pull_request.labels.*.name, 'preview')
     uses: gitops-ci-cd/.github/.github/workflows/deployment.yaml@main
     with:
       environment: preview
-    secrets: inherit
+
+  build:
+    needs: deploy_preview
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gitops-ci-cd/.github/actions/build@main

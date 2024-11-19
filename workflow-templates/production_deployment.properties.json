@@ -1,4 +1,4 @@
 {
   "name": "Production Deployment",
-  "description": "Kick off a production deployment upon release"
+  "description": "Deploy the application to production"
 }

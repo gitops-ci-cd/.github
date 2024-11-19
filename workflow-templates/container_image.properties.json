@@ -1,4 +1,0 @@
-{
-  "name": "Container Image",
-  "description": "Build, tag, and push Docker container image to GHCR"
-}
