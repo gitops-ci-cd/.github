@@ -18,14 +18,14 @@ runs:
       id: meta
       uses: docker/metadata-action@v5
       env:
-        DOCKER_METADATA_PR_HEAD_SHA: ${{github.event_name == 'pull_request'}}
+        DOCKER_METADATA_PR_HEAD_SHA: ${{ github.event_name == 'pull_request' }}
       with:
         images: ${{ inputs.registry }}/${{ inputs.image_name }}
         tags: |
           type=raw,value=latest,enable={{is_default_branch}}
           type=semver,pattern={{version}},enable={{is_default_branch}}
           type=sha,priority=1000,prefix=,suffix=,format=long
-          type=ref,event=pr,enable=${{github.event_name == 'pull_request'}}
+          type=ref,event=pr,enable=${{ github.event_name == 'pull_request' }}
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
