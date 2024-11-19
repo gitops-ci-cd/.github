@@ -18,14 +18,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.PAT }}
-          persist-credentials: false
-      - env:
-          EMAIL: "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
-        run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email $EMAIL
       - name: Detect Version
         id: version
         run: |
@@ -54,10 +46,11 @@ jobs:
           fi
           echo "  Version found: $VERSION"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-      - name: Create and push tag
+      - name: Create release
         if: success() && steps.version.outputs.version != ''
         env:
+          GH_TOKEN: ${{ secrets.PAT }}
           VERSION: ${{ steps.version.outputs.version }}
+          SHA: ${{ github.sha }}
         run: |
-          git tag -a v$VERSION -m "Tagged from GitHub Actions"
-          git push origin v$VERSION
+          gh release create "v${VERSION}" --title "Version ${VERSION}" --notes "Released via GitHub Actions" --target $SHA
