@@ -4,7 +4,7 @@
 on:
   workflow_call:
     secrets:
-      PAT:
+      FOO:
         description: Personal Access Token (PAT) used to authenticate with GitHub
         required: true
 
@@ -49,7 +49,7 @@ jobs:
       - name: Create release
         if: success() && steps.version.outputs.version != ''
         env:
-          GH_TOKEN: ${{ secrets.PAT }}
+          GH_TOKEN: ${{ secrets.FOO }}
           VERSION: ${{ steps.version.outputs.version }}
           SHA: ${{ github.sha }}
         run: |
