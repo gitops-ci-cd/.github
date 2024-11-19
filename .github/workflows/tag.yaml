@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.PAT }}
-          # persist-credentials: false
+          persist-credentials: false
       - env:
           EMAIL: "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
         run: |
