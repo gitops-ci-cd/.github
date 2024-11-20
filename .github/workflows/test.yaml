@@ -9,7 +9,8 @@ permissions:
 name: Test
 
 jobs:
-  docker_compose_test:
+  test:
+    name: Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
