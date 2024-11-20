@@ -184,7 +184,7 @@ flowchart TD
         build[Docker Image]
         tag[Tag/Release]
         pr[Pull Request]
-        integrate[Integrate]
+        integration[Integration]
 
         app -- push --> deployment
         deployment --> build
@@ -196,7 +196,7 @@ flowchart TD
         argo-image-updater -- 1 --o registry
         argo-image-updater -- 2 --> app-deployment
         app-deployment -- pull_request --> pr
-        pr -- synchronize --> integrate
+        pr -- synchronize --> integration
         pr --> app-deployment
         argo-app -- 3 --o app-deployment
         argo -- 4 --> deployment-status
