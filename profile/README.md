@@ -16,8 +16,6 @@ This organization provides reference implementations for applications that are C
 
   Use this template [TODO]().
 
-  ![image](https://github.com/user-attachments/assets/e14defec-e13b-4779-9a53-ba1ca1af300e)
-
 - [[app]-infra](https://github.com/gitops-ci-cd/acme-node-infra) Repository
 
   Manages infrastructure resources specific to the application, such as storage or queues, keeping infrastructure configuration separate from application code.
@@ -29,8 +27,6 @@ This organization provides reference implementations for applications that are C
   Manages Kubernetes addons and configurations that enhance a cluster's functionality. These repositories are auto discovered by Argo CD for continuous deployment to all clusters. See [argo-config](https://github.com/gitops-ci-cd/argo-config/blob/main/app-of-apps/addons/) for more information.
 
   Use this template [TODO]().
-
-  ![image](https://github.com/user-attachments/assets/ca98b4ff-7d16-4b15-9151-89f938497fde)
 
 - [.github](https://github.com/gitops-ci-cd/.github) Repository
 
@@ -119,7 +115,6 @@ This flowchart provides some insight into the pipeline of events that trigger CI
 
 ```mermaid
 flowchart TD
-
     registry[GitHub Container Registry]
 
     subgraph env[Preview Environment]
@@ -143,9 +138,17 @@ flowchart TD
     end
 ```
 
-Concretely, that looks like this within GitHub's Actions.
+Concretely, that looks like this within the [integration.yaml GitHub Action](https://github.com/gitops-ci-cd/.github/blob/main/workflow-templates/integration.yaml).
 
-![image](https://github.com/user-attachments/assets/019a51c5-ef4a-4c99-aa6e-2bae3c49e366)
+```mermaid
+flowchart LR
+    lint[Integration / Lint]
+    test[Integration / Test]
+    preview[Preview / Deploy]
+    build[Image / Build]
+
+    lint & test --> preview --> build
+```
 
 ## Production Workflow
 
@@ -191,9 +194,17 @@ flowchart TD
     end
 ```
 
-Concretely, that looks like this within GitHub's Actions.
+Concretely, that looks like this within the [deployment.yaml GitHub Action](https://github.com/gitops-ci-cd/.github/blob/main/workflow-templates/deployment.yaml).
 
-![image](https://github.com/user-attachments/assets/8a5a7207-74c5-4bcf-a832-c135271fd123)
+```mermaid
+flowchart LR
+    production[Production / Deploy]
+    sandbox[Sandbox / Deploy]
+    build[Image / Build]
+    release[GitHub / Release]
+
+    production --> sandbox --> build --> release
+```
 
 ## Summary
 
