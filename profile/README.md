@@ -129,14 +129,14 @@ flowchart TD
         app -- pull_request --> pr
         pr -- synchronize --> integration
         pr -- labeled --> deployment
+        pr -- 1 --> argo-app
         deployment --> build
         deployment --> deployment-status
         build --> registry
 
         env
-        argo-app -- 1 --o registry
-        argo-app ---o app-deployment
-        argo -- 2 --> deployment-status
+        argo-app -- 2 --o app-deployment
+        argo -- 3 --> deployment-status
     end
 ```
 
