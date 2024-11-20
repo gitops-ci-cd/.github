@@ -11,12 +11,11 @@ permissions:
 name: Release Repository
 
 jobs:
-  create:
+  release:
+    name: Release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: gitops-ci-cd/.github/actions/release@main
         with:
           sha: ${{ github.sha }}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
