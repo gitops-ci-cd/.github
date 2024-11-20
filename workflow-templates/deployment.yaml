@@ -17,28 +17,28 @@ permissions:
   id-token: write
   deployments: write
 
-name: Production Deployment
+name: Deployment
 
 jobs:
-  deploy_production:
+  production:
+    name: Production
     uses: gitops-ci-cd/.github/.github/workflows/deployment.yaml@main
     with:
       environment: production
 
-  deploy_sandbox:
-    needs: deploy_production
+  sandbox:
+    needs: production
+    name: Sandbox
     uses: gitops-ci-cd/.github/.github/workflows/deployment.yaml@main
     with:
       environment: sandbox
 
   build:
-    needs: deploy_sandbox
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: gitops-ci-cd/.github/actions/release@main
-        with:
-          sha: ${{ github.sha }}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-      - uses: gitops-ci-cd/.github/actions/build@main
+    needs: sandbox
+    name: Image
+    uses: gitops-ci-cd/.github/.github/workflows/build.yaml@main
+
+  release:
+    needs: build
+    name: GitHub
+    uses: gitops-ci-cd/.github/.github/workflows/release.yaml@main
