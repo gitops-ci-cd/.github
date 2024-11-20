@@ -17,28 +17,28 @@ permissions:
   id-token: write
   deployments: write
 
-name: Integrate
+name: Integration
 
 jobs:
   lint:
-    name: Integration
+    name: Integrate
     uses: gitops-ci-cd/.github/.github/workflows/lint.yaml@main
 
   test:
-    name: Integration
+    name: Integrate
     uses: gitops-ci-cd/.github/.github/workflows/test.yaml@main
 
-  deploy_preview:
+  deploy:
     needs:
       - lint
       - test
     if: github.event.action == 'labeled' && github.event.label.name == 'preview' || github.event.action == 'synchronize' && contains(github.event.pull_request.labels.*.name, 'preview')
-    name: Preview
-    uses: gitops-ci-cd/.github/.github/workflows/deployment.yaml@main
+    name: Deploy
+    uses: gitops-ci-cd/.github/.github/workflows/deploy.yaml@main
     with:
       environment: preview
 
   build:
-    needs: deploy_preview
-    name: Image
+    needs: deploy
+    name: Build
     uses: gitops-ci-cd/.github/.github/workflows/build.yaml@main

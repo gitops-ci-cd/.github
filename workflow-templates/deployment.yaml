@@ -20,25 +20,21 @@ permissions:
 name: Deployment
 
 jobs:
-  production:
-    name: Production
-    uses: gitops-ci-cd/.github/.github/workflows/deployment.yaml@main
+  deploy:
+    name: Deploy
+    strategy:
+      matrix:
+        target: [production, sandbox]
+    uses: gitops-ci-cd/.github/.github/workflows/deploy.yaml@main
     with:
-      environment: production
-
-  sandbox:
-    needs: production
-    name: Sandbox
-    uses: gitops-ci-cd/.github/.github/workflows/deployment.yaml@main
-    with:
-      environment: sandbox
+      environment: ${{ matrix.target }}
 
   build:
-    needs: sandbox
-    name: Image
+    needs: deploy
+    name: Build
     uses: gitops-ci-cd/.github/.github/workflows/build.yaml@main
 
   release:
     needs: build
-    name: GitHub
+    name: Release
     uses: gitops-ci-cd/.github/.github/workflows/release.yaml@main

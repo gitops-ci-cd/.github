@@ -10,7 +10,7 @@ name: Lint
 
 jobs:
   lint:
-    name: Lint
+    name: Linter
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
