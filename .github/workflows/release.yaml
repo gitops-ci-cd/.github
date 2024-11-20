@@ -14,6 +14,7 @@ jobs:
   create:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: gitops-ci-cd/.github/actions/release@main
         with:
           sha: ${{ github.sha }}

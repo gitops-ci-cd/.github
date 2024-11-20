@@ -16,8 +16,5 @@ jobs:
   build_push:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          token: ${{ github.token }}
+      - uses: actions/checkout@v4
       - uses: gitops-ci-cd/.github/actions/build@main
