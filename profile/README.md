@@ -177,6 +177,8 @@ flowchart TD
     end
 
     subgraph prod[Production Workflow]
+        app[App Repo]
+        app-deployment[Deployment Repo]
         deployment[GitHub Deployment]
         deployment-status[GitHub Deployment Status]
         build[Docker Image]
