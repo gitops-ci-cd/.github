@@ -8,9 +8,6 @@ permissions:
 
 name: Test
 
-env:
-  NODE_ENV: development
-
 jobs:
   docker_compose_test:
     runs-on: ubuntu-latest
