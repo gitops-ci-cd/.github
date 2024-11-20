@@ -115,7 +115,7 @@ This organization provides reference implementations for applications that are C
     - Once the PR is approved and merged to main, a GitHub Action builds a production-ready image, tags/releases the repo, and triggers a [deployment](https://docs.github.com/en/rest/deployments/deployments) workflow targeting production.
     - The release serves as an artifact of the build, versioned and traceable for production use.
 
-This flowchart provides some insight into the "pipeline" of events that trigger CI and CD. The numbers represent the order that deployments happen.
+This flowchart provides some insight into the pipeline of events that trigger CI and CD. The numbers represent the order that deployments happen.
 
 ```mermaid
 flowchart TD
@@ -143,6 +143,10 @@ flowchart TD
     end
 ```
 
+Concretely, that looks like this within GitHub's Actions.
+
+![image](https://github.com/user-attachments/assets/019a51c5-ef4a-4c99-aa6e-2bae3c49e366)
+
 ## Production Workflow
 
 1. New Image Detection
@@ -155,7 +159,7 @@ flowchart TD
     - Upon merging to main, Argo CD picks up the updated deployment configuration and rolls out the new image to the production environment.
     - [Argo's Notification tooling](https://argo-cd.readthedocs.io/en/stable/operator-manual/notifications/) then sends [deployment status updates to GitHub](https://docs.github.com/en/rest/deployments/deployments), notifying the deployment with statuses `in_progress`, `success`, `failure`, or `error`.
 
-This flowchart provides some insight into the "pipeline" of events that trigger CI and CD. The numbers represent the order that deployments happen.
+This flowchart provides some insight into the pipeline of events that trigger CI and CD. The numbers represent the order that deployments happen.
 
 ```mermaid
 flowchart TD
@@ -186,6 +190,10 @@ flowchart TD
         argo -- 4 --> deployment-status
     end
 ```
+
+Concretely, that looks like this within GitHub's Actions.
+
+![image](https://github.com/user-attachments/assets/8a5a7207-74c5-4bcf-a832-c135271fd123)
 
 ## Summary
 
