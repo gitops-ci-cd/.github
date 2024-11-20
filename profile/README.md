@@ -50,8 +50,8 @@ This organization provides reference implementations for applications that are C
 
 1. Automatic Preview Deployments
 
-    - The [Argo CD PR Generator](https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Generators-Pull-Request/) detects PRs labeled with <https://github.com/gitops-ci-cd/.github/labels/preview> and generates a preview environment for the specific PR branch.
-    - The PR-specific environment allows for isolated testing and review.
+    - The [Argo CD PR Generator](https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Generators-Pull-Request/) detects PRs labeled with <https://github.com/gitops-ci-cd/.github/labels/preview> and generates a transient environment for the branch.
+    - The PR-specific environment allows for isolated testing and review on dedicated subdomains.
     - Upon successful deployment, [Argo's Notification tooling](https://argo-cd.readthedocs.io/en/stable/operator-manual/notifications/) sends [deployment status updates to GitHub](https://docs.github.com/en/rest/deployments/deployments), notifying the PR's deployment with statuses `in_progress`, `success`, `failure`, or `error` for real-time feedback on the preview environment.
     - The preview deployment is torn down upon removing the aforementioned label or closing the PR.
 
@@ -106,11 +106,6 @@ This organization provides reference implementations for applications that are C
         linkStyle 8,9,10,11 stroke-width:2px,stroke:blue;
     ```
 
-1. Releasing to Production
-
-    - Once the PR is approved and merged to main, a GitHub Action builds a production-ready image, tags/releases the repo, and triggers a [deployment](https://docs.github.com/en/rest/deployments/deployments) workflow targeting production.
-    - The release serves as an artifact of the build, versioned and traceable for production use.
-
 This flowchart provides some insight into the pipeline of events that trigger CI and CD. The numbers represent the order that deployments happen.
 
 ```mermaid
@@ -123,18 +118,25 @@ flowchart TD
     end
 
     subgraph dev[Development Workflow]
-        app -- pull_request --> pr[Pull Request]
-        pr -- synchronize --> lint[Lint] & test[Test]
-        pr -- labeled --> deployment[GitHub Deployment] --> deployment-status[GitHub Deployment Status]
-        deployment -- deployment --> build[Docker Image]
+        app[App Repo]
+        app-deployment[Deployment Repo]
+        deployment[GitHub Deployment]
+        deployment-status[GitHub Deployment Status]
+        build[Docker Image]
+        pr[Pull Request]
+        integration[Integration]
+
+        app -- pull_request --> pr
+        pr -- synchronize --> integration
+        pr -- labeled --> deployment
+        deployment --> build
+        deployment --> deployment-status
         build --> registry
 
         env
         argo-app -- 1 --o registry
         argo-app ---o app-deployment
         argo -- 2 --> deployment-status
-
-        pr -- closed --> app
     end
 ```
 
@@ -142,10 +144,10 @@ Concretely, that looks like this within the [integration.yaml GitHub Action](htt
 
 ```mermaid
 flowchart LR
-    lint[Integration / Lint]
-    test[Integration / Test]
-    preview[Preview / Deploy]
-    build[Image / Build]
+    lint[Integrate / Linter]
+    test[Integrate / Tests]
+    preview[Deploy / preview]
+    build[Build / Image]
 
     lint & test --> preview --> build
 ```
@@ -166,29 +168,34 @@ This flowchart provides some insight into the pipeline of events that trigger CI
 
 ```mermaid
 flowchart TD
-
     registry[GitHub Container Registry]
 
-    subgraph env[Production Environment]
+    subgraph production[Production Environment]
         argo[Argo CD]
         argo-image-updater[Argo CD Image Updater]
         argo-app[Argo Application]
     end
 
     subgraph prod[Production Workflow]
-        app -- push --> tag[Tag/Release]
-        tag -- release --> deployment[GitHub Deployment] --> deployment-status[GitHub Deployment Status]
-        deployment -- deployment --> build[Docker Image]
-        build --> registry
+        deployment[GitHub Deployment]
+        deployment-status[GitHub Deployment Status]
+        build[Docker Image]
+        tag[Tag/Release]
+        pr[Pull Request]
+        integrate[Integrate]
 
-        env
+        app -- push --> deployment
+        deployment --> build
+        deployment --> deployment-status
+        build --> tag
+        build --> registry
+        
+        production
         argo-image-updater -- 1 --o registry
         argo-image-updater -- 2 --> app-deployment
-
-        app-deployment -- pull_request --> pr[Pull Request]
-        pr -- synchronize --> validate[Validate]
-        pr -- closed --> app-deployment
-
+        app-deployment -- pull_request --> pr
+        pr -- synchronize --> integrate
+        pr --> app-deployment
         argo-app -- 3 --o app-deployment
         argo -- 4 --> deployment-status
     end
@@ -198,17 +205,17 @@ Concretely, that looks like this within the [deployment.yaml GitHub Action](http
 
 ```mermaid
 flowchart LR
-    production[Production / Deploy]
-    sandbox[Sandbox / Deploy]
-    build[Image / Build]
-    release[GitHub / Release]
+    production[Deploy / production]
+    sandbox[Deploy / sandbox]
+    build[Build / Image]
+    release[Release / acme-node]
 
-    production --> sandbox --> build --> release
+    production & sandbox --> build --> release
 ```
 
 ## Summary
 
-These pipelines leverages GitOps principles and automated deployments to ensure a streamlined, consistent deployment process:
+These pipelines leverage GitOps principles (via GitHub) and automated deployments (via Argo CD) to ensure a streamlined, consistent deployment process:
 
 - Preview environments for each PR with isolated, PR-specific deployments.
 - Automated versioning and tagging upon merging to main, ensuring each production release is traceable.
