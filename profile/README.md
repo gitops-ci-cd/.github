@@ -41,7 +41,7 @@ This organization provides reference implementations for applications that are C
 
   This is another special repository within GitHub that [extends profile customization](https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/customizing-your-organizations-profile#adding-a-member-only-organization-profile-readme).
 
-## Development Workflow
+## Integration Workflow
 
 1. Feature Development and Pull Requests
 
@@ -152,7 +152,7 @@ flowchart LR
     lint & test --> preview --> build
 ```
 
-## Production Workflow
+## Deployment Workflow
 
 1. New Image Detection
 
