@@ -5,6 +5,8 @@ on:
       - reopened
       - labeled
       - synchronize
+    branches:
+      - $default-branch
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
