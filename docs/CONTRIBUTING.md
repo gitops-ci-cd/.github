@@ -2,20 +2,6 @@
 
 Thank you for your interest in contributing! We welcome all contributions and appreciate your help in making this project better.
 
-## Table of Contents
-
-1. [Code of Conduct](#code-of-conduct)
-2. [How to Contribute](#how-to-contribute)
-   - [Reporting Issues](#reporting-issues)
-   - [Suggesting Features](#suggesting-features)
-   - [Submitting Pull Requests](#submitting-pull-requests)
-3. [Setting Up Your Environment](#setting-up-your-environment)
-4. [Coding Standards](#coding-standards)
-5. [Testing](#testing)
-6. [Additional Notes](#additional-notes)
-
----
-
 ## Code of Conduct
 
 Please review our [Code of Conduct](?tab=coc-ov-file) before contributing. By participating in this project, you agree to abide by its terms.
