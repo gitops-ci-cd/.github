@@ -1,0 +1,21 @@
+on:
+  repository_dispatch:
+    types:
+      - sync-deployment-status
+
+permissions:
+  contents: read
+  deployments: write
+
+name: Deployment Status
+
+jobs:
+  sync:
+    name: Sync
+    uses: gitops-ci-cd/.github/.github/workflows/sync_deployment.yaml@main
+    with:
+      ref: ${{ github.event.client_payload.ref }}
+      state: ${{ github.event.client_payload.state }}
+      environment: ${{ github.event.client_payload.environment }}
+      environment_url: ${{ github.event.client_payload.environment_url }}
+      log_url: ${{ github.event.client_payload.log_url }}

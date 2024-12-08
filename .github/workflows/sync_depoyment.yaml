@@ -1,0 +1,41 @@
+# https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        type: string
+        description: The name of the ref. This can be a branch, tag, or SHA.
+        required: true
+      state:
+        type: string
+        description: The state of the status. When you set a transient deployment to inactive, the deployment will be shown as destroyed in GitHub.
+        required: true
+      environment:
+        type: string
+        description: Name for the target deployment environment, which can be changed when setting a deploy status.
+      environment_url:
+        type: string
+        description: Sets the URL for accessing your environment.
+      log_url:
+        type: string
+        description: This URL should contain output to keep the user updated while the task is running or serve as historical information for what happened in the deployment.
+
+permissions:
+  contents: read
+  deployments: write
+
+name: Sync Deployment
+
+jobs:
+  sync:
+    name: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: gitops-ci-cd/.github/actions/sync_deployment@main
+        with:
+          ref: ${{ inputs.ref }}
+          state: ${{ inputs.state }}
+          environment: ${{ inputs.environment }}
+          environment_url: ${{ inputs.environment_url }}
+          log_url: ${{ inputs.log_url }}
