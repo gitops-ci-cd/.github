@@ -20,7 +20,8 @@ runs:
           const response = await github.rest.repos.createDeployment({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            ref: context.payload?.pull_request?.head?.ref || context.sha,
+            # ref: context.payload?.pull_request?.head?.ref || context.sha,
+            ref: context.sha,
             required_contexts: [],
             environment: TARGET_ENV,
             transient_environment: TARGET_ENV === 'preview',
