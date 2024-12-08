@@ -1,4 +1,4 @@
 {
-  "name": "Deployment",
-  "description": "Deploy the application to production"
+  "name": "Deployment Status",
+  "description": "Update the status of a GitHub deployment"
 }
