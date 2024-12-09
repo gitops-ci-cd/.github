@@ -20,11 +20,14 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Query Latest Deployment ID
-      id: query
+    - id: query
       uses: actions/github-script@v7
       env:
         INPUT_REF: ${{ inputs.ref }}
+        INPUT_STATE: ${{ inputs.state }}
+        INPUT_ENVIRONMENT: ${{ inputs.environment }}
+        INPUT_ENVIRONMENT_URL: ${{ inputs.environment_url }}
+        INPUT_LOG_URL: ${{ inputs.log_url }}
       with:
         script: |
           console.log(`Querying latest deployment for ref: ${core.getInput('ref')}`);
@@ -40,34 +43,22 @@ runs:
             return;
           }
 
-          const id = response.data[0].id;
+          console.log(`  Updating deployment status...`);
 
-          console.log(`  Latest deployment ID: ${id}`);
+          data.some(async (deployment, i) => {
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: deployment.id,
+              state: core.getInput('state'),
+              environment: core.getInput('environment'),
+              environment_url: core.getInput('environment_url'),
+              // log_url: core.getInput('log_url'),
+              description: "Deployment status updated via repository_dispatch",
+            });
 
-          return id;
-        result-encoding: string
-
-    - name: Update Deployment Status
-      uses: actions/github-script@v7
-      env:
-        INPUT_STATE: ${{ inputs.state }}
-        INPUT_ENVIRONMENT: ${{ inputs.environment }}
-        INPUT_ENVIRONMENT_URL: ${{ inputs.environment_url }}
-        INPUT_LOG_URL: ${{ inputs.log_url }}
-      with:
-        script: |
-          console.log(`Updating deployment status...`);
-          console.log("context", context);
-
-          await github.rest.repos.createDeploymentStatus({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            deployment_id: ${{ steps.query.outputs.result }},
-            state: core.getInput('state'),
-            environment: core.getInput('environment'),
-            environment_url: core.getInput('environment_url'),
-            // log_url: core.getInput('log_url'),
-            description: "Deployment status updated via repository_dispatch",
+            // Set all deployments to inactive for preview environments
+            return i > 0 && core.getInput('environment') != 'preview' && core.getInput('state') != 'inactive';
           });
 
-          console.log(`  Deployment status updated to ${core.getInput('state')}!`);
+          console.log(`  Deployment status updated: ${core.getInput('state')}`);
