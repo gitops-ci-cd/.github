@@ -46,7 +46,7 @@ runs:
           console.log(`  Updating deployment status...`);
 
           let state = core.getInput('state');
-          for (const [i, deployment] of response.data.entries()) {
+          for (const deployment of response.data) {
             await github.rest.repos.createDeploymentStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
