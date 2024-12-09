@@ -46,7 +46,7 @@ runs:
           console.log(`  Updating deployment status...`);
 
           let state = core.getInput('state');
-          response.data.some(async (deployment, i) => {
+          for (const [i, deployment] of response.data.entries()) {
             await github.rest.repos.createDeploymentStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -54,13 +54,13 @@ runs:
               state: state,
               environment: core.getInput('environment'),
               environment_url: core.getInput('environment_url'),
-              // log_url: core.getInput('log_url'),
+              log_url: core.getInput('log_url'),
               description: "Deployment status updated via repository_dispatch",
             });
 
-            state = 'inactive';
             // Set all previous deployments to inactive for preview environments
-            return i > 0 && core.getInput('environment') != 'preview'
-          });
+            if (core.getInput('environment') != 'preview') break;
+            state = 'inactive';
+          }
 
           console.log(`  Deployment status updated: ${core.getInput('state')}`);
