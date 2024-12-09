@@ -29,7 +29,7 @@ runs:
         script: |
           console.log(`Querying latest deployment for ref: ${core.getInput('ref')}`);
 
-          const response = await github.repos.listDeployments({
+          const response = await github.rest.repos.listDeployments({
             owner: context.repo.owner,
             repo: context.repo.repo,
             ref: core.getInput('ref'),
