@@ -59,7 +59,7 @@ runs:
           console.log(`Updating deployment status...`);
           console.log("context", context);
 
-          await github.repos.createDeploymentStatus({
+          await github.rest.repos.createDeploymentStatus({
             owner: context.repo.owner,
             repo: context.repo.repo,
             deployment_id: ${{ steps.query.outputs.result }},
