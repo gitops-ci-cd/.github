@@ -45,7 +45,7 @@ runs:
 
           console.log(`  Updating deployment status...`);
 
-          data.some(async (deployment, i) => {
+          response.data.some(async (deployment, i) => {
             await github.rest.repos.createDeploymentStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
