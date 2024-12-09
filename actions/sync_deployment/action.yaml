@@ -54,7 +54,7 @@ runs:
               state: state,
               environment: core.getInput('environment'),
               environment_url: core.getInput('environment_url'),
-              log_url: core.getInput('log_url'),
+              // log_url: core.getInput('log_url'),
               description: "Deployment status updated via repository_dispatch",
             });
 
