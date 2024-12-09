@@ -58,10 +58,9 @@ runs:
               description: "Deployment status updated via repository_dispatch",
             });
 
+            state = 'inactive';
             // Set all previous deployments to inactive for preview environments
             return i > 0 && core.getInput('environment') != 'preview'
-
-            state = 'inactive';
           });
 
           console.log(`  Deployment status updated: ${core.getInput('state')}`);
