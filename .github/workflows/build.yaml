@@ -3,6 +3,17 @@
 
 on:
   workflow_call:
+    inputs:
+      registry:
+        type: string
+        description: The Docker registry to push the image to
+        required: false
+        default: ghcr.io
+      image_name:
+        type: string
+        description: The name of the Docker image
+        required: false
+        default: ${{ github.repository }}
 
 permissions:
   contents: read
@@ -19,3 +30,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: gitops-ci-cd/.github/actions/build@main
+        with:
+          registry: ${{ inputs.registry }}
+          image_name: ${{ inputs.image_name }}
