@@ -5,6 +5,9 @@ inputs:
   sha:
     description: The commit SHA to tag and release
     required: true
+  release_type:
+    description: The type of release (patch, minor, major)
+    default: minor
 
 runs:
   using: composite
@@ -19,7 +22,11 @@ runs:
           VERSION=$(jq -r .version package.json)
         elif [ -f "go.mod" ]; then
           echo "  go.mod detected"
-          VERSION=$(grep -E '^module' go.mod | awk '{print $2}')
+          if git rev-parse --git-dir > /dev/null 2>&1; then
+            VERSION=$(git describe --tags --always)
+          else
+            VERSION="unknown"
+          fi
         elif [ -f "setup.py" ]; then
           echo "  setup.py detected"
           VERSION=$(grep -E 'version=' setup.py | sed "s/.*version=['\"]\([^'\"]*\)['\"].*/\1/")
