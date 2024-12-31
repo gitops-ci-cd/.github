@@ -59,21 +59,21 @@ This organization provides reference implementations for applications that are C
 
     ```mermaid
     flowchart LR
-        url_foo[foo.sandbox.acme.inc]:::foo
-        url_bar[bar.sandbox.acme.inc]:::bar
-        url_sandbox[sandbox.acme.inc]
+        url_foo[foo.acme.inc]:::foo
+        url_bar[bar.acme.inc]:::bar
+        url_sandbox[sandbox.acme.inc]:::main
 
         url_sandbox --> a
 
         subgraph main[Sandbox Env]
             a[Service A
-                main]
+                main]:::main
             b[Service B
-                main]
+                main]:::main
             c[Service C
-                main]
+                main]:::main
             d[Service D
-                main]
+                main]:::main
 
             a --> b --> c --> d
         end
@@ -98,6 +98,7 @@ This organization provides reference implementations for applications that are C
             a -.-> b_bar -.-> c -.-> d
         end
 
+        classDef main stroke-width:4px;
         classDef foo stroke:red;
         classDef bar stroke:blue;
 
