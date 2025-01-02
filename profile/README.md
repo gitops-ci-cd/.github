@@ -55,7 +55,7 @@ This organization provides reference implementations for applications that are C
     - Upon successful deployment, [Argo's Notification tooling](https://argo-cd.readthedocs.io/en/stable/operator-manual/notifications/) sends [deployment status updates to GitHub](https://docs.github.com/en/rest/deployments/deployments), notifying the PR's deployment with statuses `in_progress`, `success`, `failure`, or `error` for real-time feedback on the preview environment.
     - The preview deployment is torn down upon removing the aforementioned label or closing the PR.
 
-    Requests made via the subdomains matching the PR are routed to the preview environment, allowing for easy access to the Preview deployment.
+    Requests made via the subdomains matching the PR are routed to the preview environment, allowing for easy access to the Preview deployment. The stitching of these requests leverages the [W3C Baggage spec](https://www.w3.org/TR/baggage/), and relies on tracing libraries (such as [otel](https://opentelemetry.io/docs/concepts/signals/baggage/)) to propagate the context from service to service.
 
     ```mermaid
     flowchart LR
