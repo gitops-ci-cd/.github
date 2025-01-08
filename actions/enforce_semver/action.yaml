@@ -36,7 +36,7 @@ runs:
         echo "No valid label found. Adding '$increment_label'."
         gh pr edit $PR_NUMBER --add-label $increment_label
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ github.token }}
         PR_NUMBER: ${{ github.event.pull_request.number }}
     - name: Increment
       shell: bash
