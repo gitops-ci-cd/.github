@@ -79,7 +79,7 @@ runs:
       shell: bash
       run: |
         if [ -n "$DETECTED_VERSION" ]; then
-          echo "version=$detected_version" >> $GITHUB_OUTPUT
+          echo "version=$DETECTED_VERSION" >> $GITHUB_OUTPUT
           echo "Detected Version: $DETECTED_VERSION"
         else
           echo "version=0.0.0" >> $GITHUB_OUTPUT
