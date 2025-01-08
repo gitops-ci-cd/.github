@@ -34,7 +34,7 @@ runs:
           echo "DETECTED_VERSION=$detected_version" >> $GITHUB_ENV
         done
 
-    - name: Check for .NET (Directory.Build.props)
+    - name: Check for .NET
       if: hashFiles('Directory.Build.props') != ''
       shell: bash
       run: |
@@ -50,7 +50,7 @@ runs:
         detected_version=$(grep -oP "version='\K${{ inputs.regex }}" setup.py)
         echo "DETECTED_VERSION=$detected_version" >> $GITHUB_ENV
 
-    - name: Check for Python (pyproject.toml)
+    - name: Check for Python
       if: hashFiles('pyproject.toml') != ''
       shell: bash
       run: |
@@ -79,9 +79,9 @@ runs:
       shell: bash
       run: |
         if [ -n "$DETECTED_VERSION" ]; then
-          echo "version=$DETECTED_VERSION" >> $GITHUB_OUTPUT
           echo "Detected Version: $DETECTED_VERSION"
         else
-          echo "version=0.0.0" >> $GITHUB_OUTPUT
+          DETECTED_VERSION=0.0.0
           echo "No version detected!"
         fi
+        echo "version=$DETECTED_VERSION" >> $GITHUB_OUTPUT
