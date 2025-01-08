@@ -10,15 +10,19 @@ permissions:
 name: Bump Version
 
 jobs:
-  enforce_label:
-    name: Enforce Label
+  bump:
+    name: Bump
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.ref }}
-      - uses: gitops-ci-cd/.github/actions/semver_label_enforcement@main
+      - uses: gitops-ci-cd/.github/actions/enforce_semver@main
         id: semver
-      - uses: gitops-ci-cd/.github/actions/bump_version@main
+      - uses: gitops-ci-cd/.github/actions/check_version@main
+        id: version
         with:
-          version: ${{ steps.semver.outputs.new-version }}
+          increment: ${{ steps.semver.outputs.increment }}
+      - uses: gitops-ci-cd/.github/actions/update_version@main
+        with:
+          version: ${{ steps.version.outputs.next }}

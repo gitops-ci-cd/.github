@@ -1,5 +1,5 @@
-name: Bump Version
-description: Bumps the version in the source code per the language detected
+name: Update Version
+description: Updates the version within the source code per the language detected
 
 inputs:
   version:
@@ -18,7 +18,7 @@ runs:
       shell: bash
       run: |
         echo "JavaScript detected..."
-        sed -i "s/\"version\": \"${{ inputs.version }}\"/\"version\": \"${{ inputs.version }}\"/" package.json
+        sed -i "s/\"version\": \"${{ inputs.regex }}\"/\"version\": \"${{ inputs.version }}\"/" package.json
         echo "Updated package.json"
     - name: Check for .NET
       if: hashFiles('*.csproj') != ''
@@ -27,7 +27,7 @@ runs:
         echo ".NET detected..."
         for csproj in *.csproj; do
           [ -e "$csproj" ] || continue
-          sed -i 's|<Version>${{ inputs.version }}</Version>|<Version>'${{ inputs.version }}'</Version>|' "$csproj"
+          sed -i 's|<Version>${{ inputs.regex }}</Version>|<Version>'${{ inputs.version }}'</Version>|' "$csproj"
           echo "Updated $csproj"
         done
     - name: Check for .NET
@@ -35,35 +35,35 @@ runs:
       shell: bash
       run: |
         echo ".NET detected..."
-        sed -i 's|<Version>${{ inputs.version }}</Version>|<Version>'${{ inputs.version }}'</Version>|' Directory.Build.props
+        sed -i 's|<Version>${{ inputs.regex }}</Version>|<Version>'${{ inputs.version }}'</Version>|' Directory.Build.props
         echo "Updated Directory.Build.props"
     - name: Check for Python
       if: hashFiles('setup.py') != ''
       shell: bash
       run: |
         echo "Python detected..."
-        sed -i "s/version='${{ inputs.version }}'/version='${{ inputs.version }}'/" setup.py
+        sed -i "s/version='${{ inputs.regex }}'/version='${{ inputs.version }}'/" setup.py
         echo "Updated setup.py"
     - name: Check for Python
       if: hashFiles('pyproject.toml') != ''
       shell: bash
       run: |
         echo "Python detected..."
-        sed -i 's/^version = "${{ inputs.version }}"/version = "'${{ inputs.version }}'"/' pyproject.toml
+        sed -i 's/^version = "${{ inputs.regex }}"/version = "'${{ inputs.version }}'"/' pyproject.toml
         echo "Updated pyproject.toml"
     - name: Check for Java
       if: hashFiles('build.gradle') != ''
       shell: bash
       run: |
         echo "Java detected..."
-        sed -i 's/version = "${{ inputs.version }}"/version = "'${{ inputs.version }}'"/' build.gradle
+        sed -i 's/version = "${{ inputs.regex }}"/version = "'${{ inputs.version }}'"/' build.gradle
         echo "Updated build.gradle"
     - name: Check for Kotlin
       if: hashFiles('build.gradle.kts') != ''
       shell: bash
       run: |
         echo "Kotlin detected..."
-        sed -i 's/version = "${{ inputs.version }}"/version = "'${{ inputs.version }}'"/' build.gradle.kts
+        sed -i 's/version = "${{ inputs.regex }}"/version = "'${{ inputs.version }}'"/' build.gradle.kts
         echo "Updated build.gradle.kts"
     - name: Commit and Push Changes
       shell: bash
