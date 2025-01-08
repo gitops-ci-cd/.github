@@ -1,50 +1,22 @@
 name: Release
-description: Tags and releases a repository
+description: Tags and releases a GitHub repository
 
 inputs:
   sha:
-    description: The commit SHA to tag and release
+    description: The commit SHA to tag
+    required: true
+  version:
+    description: The version to release
     required: true
 
 runs:
   using: composite
   steps:
-    - name: Detect Version
-      id: version
-      shell: bash
-      run: |
-        echo "Detecting version..."
-        if [ -f "package.json" ]; then
-          echo "  package.json detected"
-          VERSION=$(jq -r .version package.json)
-        elif [ -f "go.mod" ]; then
-          echo "  go.mod detected"
-          VERSION=$(grep -E '^module' go.mod | awk '{print $2}')
-        elif [ -f "setup.py" ]; then
-          echo "  setup.py detected"
-          VERSION=$(grep -E 'version=' setup.py | sed "s/.*version=['\"]\([^'\"]*\)['\"].*/\1/")
-        elif [ -f "Gemfile.lock" ]; then
-          echo "  Gemfile.lock detected"
-          VERSION=$(grep -E '^[ ]{4}VERSION' Gemfile.lock | awk '{print $2}')
-        elif [ -f "pom.xml" ]; then
-          echo "  pom.xml detected"
-          VERSION=$(grep -oPm1 "(?<=<version>)[^<]+" pom.xml)
-        elif [ -f "*.csproj" ]; then
-          echo "  *.csproj detected"
-          VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" *.csproj)
-        else
-          echo "  Error: No version file detected."
-          exit 1
-        fi
-        echo "  Version found: $VERSION"
-        echo "version=$VERSION" >> $GITHUB_OUTPUT
-
     - name: Create release
-      if: success() && steps.version.outputs.version != ''
       env:
         GH_TOKEN: ${{ github.token }}
-        VERSION: ${{ steps.version.outputs.version }}
         SHA: ${{ inputs.sha }}
+        VERSION: ${{ inputs.version }}
       shell: bash
       run: |
         gh release create "v${VERSION}" \

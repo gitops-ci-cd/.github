@@ -1,5 +1,5 @@
-name: Check Version
-description: Check the current and next version for the project
+name: Check Tag
+description: Check the current and next tag for the project
 
 inputs:
   increment:
@@ -8,10 +8,10 @@ inputs:
 
 outputs:
   current:
-    description: The current version of the project
+    description: The most recent SemVer tag of the project
     value: ${{ steps.determine-current.outputs.version }}
   next:
-    description: The new version of the project
+    description: The new calculated tag for the project
     value: ${{ steps.calculate-next.outputs.version }}
 
 runs:

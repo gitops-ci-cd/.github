@@ -20,12 +20,12 @@ jobs:
       - name: Enforce SemVer
         uses: gitops-ci-cd/.github/actions/enforce_semver@main
         id: semver
-      - name: Check Version
-        uses: gitops-ci-cd/.github/actions/check_version@main
-        id: version
+      - name: Check Tag
+        uses: gitops-ci-cd/.github/actions/check_tag@main
+        id: tag
         with:
           increment: ${{ steps.semver.outputs.increment }}
       - name: Update Version
         uses: gitops-ci-cd/.github/actions/update_version@main
         with:
-          version: ${{ steps.version.outputs.next }}
+          version: ${{ steps.tag.outputs.next }}

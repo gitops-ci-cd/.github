@@ -38,7 +38,7 @@ runs:
       env:
         GITHUB_TOKEN: ${{ github.token }}
         PR_NUMBER: ${{ github.event.pull_request.number }}
-    - name: Increment
+    - name: Output Detected Increment
       shell: bash
       id: increment
       run: |
