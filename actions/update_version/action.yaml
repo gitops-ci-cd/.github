@@ -20,7 +20,7 @@ runs:
         echo "JavaScript detected..."
         file="package.json"
         sed -i "s/\"version\": \"${{ inputs.regex }}\"/\"version\": \"${{ inputs.version }}\"/" $file
-        echo "  Updating $file..."
+        echo "Updating $file..."
     - name: Check for .NET
       if: hashFiles('*.csproj') != ''
       shell: bash
@@ -30,7 +30,7 @@ runs:
         for file in $files; do
           [ -e "$csproj" ] || continue
           sed -i 's|<Version>${{ inputs.regex }}</Version>|<Version>'${{ inputs.version }}'</Version>|' "$file"
-          echo "  Updating $file..."
+          echo "Updating $file..."
         done
     - name: Check for .NET
       if: hashFiles('Directory.Build.props') != ''
@@ -39,7 +39,7 @@ runs:
         echo ".NET detected..."
         file="Directory.Build.props"
         sed -i 's|<Version>${{ inputs.regex }}</Version>|<Version>'${{ inputs.version }}'</Version>|' $file
-        echo "  Updating $file..."
+        echo "Updating $file..."
     - name: Check for Python
       if: hashFiles('setup.py') != ''
       shell: bash
@@ -47,7 +47,7 @@ runs:
         echo "Python detected..."
         file="setup.py"
         sed -i "s/version='${{ inputs.regex }}'/version='${{ inputs.version }}'/" $file
-        echo "  Updating $file..."
+        echo "Updating $file..."
     - name: Check for Python
       if: hashFiles('pyproject.toml') != ''
       shell: bash
@@ -55,7 +55,7 @@ runs:
         echo "Python detected..."
         file="pyproject.toml"
         sed -i 's/^version = "${{ inputs.regex }}"/version = "'${{ inputs.version }}'"/' $file
-        echo "  Updating $file..."
+        echo "Updating $file..."
     - name: Check for Java
       if: hashFiles('build.gradle') != ''
       shell: bash
@@ -63,7 +63,7 @@ runs:
         echo "Java detected..."
         file="build.gradle"
         sed -i 's/version = "${{ inputs.regex }}"/version = "'${{ inputs.version }}'"/' $file
-        echo "  Updating $file..."
+        echo "Updating $file..."
     - name: Check for Kotlin
       if: hashFiles('build.gradle.kts') != ''
       shell: bash
@@ -71,7 +71,7 @@ runs:
         echo "Kotlin detected..."
         file="build.gradle.kts"
         sed -i 's/version = "${{ inputs.regex }}"/version = "'${{ inputs.version }}'"/' $file
-        echo "  Updating $file..."
+        echo "Updating $file..."
     - name: Commit and Push Changes
       shell: bash
       run: |
