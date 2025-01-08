@@ -1,0 +1,24 @@
+# https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions
+
+on:
+  workflow_call:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+name: Bump Version
+
+jobs:
+  enforce_label:
+    name: Enforce Label
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - uses: gitops-ci-cd/.github/actions/semver_label_enforcement@main
+        id: semver
+      - uses: gitops-ci-cd/.github/actions/bump_version@main
+        with:
+          version: ${{ steps.semver.outputs.new-version }}

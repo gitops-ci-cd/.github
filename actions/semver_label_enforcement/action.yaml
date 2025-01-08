@@ -1,0 +1,74 @@
+name: SemVer Label Enforcement
+description: Enforce SemVer labels on pull requests
+
+outputs:
+  current-version:
+    description: The current version of the project
+    value: ${{ steps.determine-current-version.outputs.version }}
+  new-version:
+    description: The new version of the project
+    value: ${{ steps.calculate-new-version.outputs.version }}
+
+runs:
+  using: composite
+  steps:
+    - name: Check for "patch" Label
+      if: contains(github.event.pull_request.labels.*.name, 'patch')
+      shell: bash
+      run: |
+        echo "Found 'patch' label."
+        echo "INCREMENT_LABEL=patch" >> $GITHUB_ENV
+    - name: Check for "minor" Label
+      if: contains(github.event.pull_request.labels.*.name, 'minor')
+      shell: bash
+      run: |
+        echo "Found 'minor' label."
+        echo "INCREMENT_LABEL=minor" >> $GITHUB_ENV
+    - name: Check for "major" Label
+      if: contains(github.event.pull_request.labels.*.name, 'major')
+      shell: bash
+      run: |
+        echo "Found 'major' label."
+        echo "INCREMENT_LABEL=major" >> $GITHUB_ENV
+    - name: Add default Label
+      if: env.INCREMENT_LABEL == ''
+      shell: bash
+      run: |
+        increment_label=minor
+        echo "INCREMENT_LABEL=$increment_label" >> $GITHUB_ENV
+        echo "No valid label found. Adding '$increment_label'."
+        gh pr edit $PR_NUMBER --add-label $increment_label
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+    - name: Determine Current Version
+      id: determine-current-version
+      shell: bash
+      run: |
+        git fetch --tags
+        current_version=$(git tag --list "v[0-9]*" --sort=-v:refname | head -n 1)
+        if [ -n "$current_version" ]; then
+          current_version=${current_version#v}
+        else
+          echo "No tags found. Using 0.0.0 as the current version."
+          current_version="0.0.0"
+        fi
+        echo "CURRENT_VERSION=$current_version" >> $GITHUB_ENV
+        echo "version=$current_version" >> $GITHUB_OUTPUT
+        echo "Current Version: $current_version"
+    - name: Calculate New Version
+      id: calculate-new-version
+      shell: bash
+      run: |
+        major=$(echo $CURRENT_VERSION | cut -d'.' -f1)
+        minor=$(echo $CURRENT_VERSION | cut -d'.' -f2)
+        patch=$(echo $CURRENT_VERSION | cut -d'.' -f3)
+
+        case "$INCREMENT_LABEL" in
+          major) new_version="$((major + 1)).0.0";;
+          minor) new_version="$major.$((minor + 1)).0";;
+          patch) new_version="$major.$minor.$((patch + 1))";;
+        esac
+
+        echo "version=$new_version" >> $GITHUB_OUTPUT
+        echo "New Version: $new_version"
