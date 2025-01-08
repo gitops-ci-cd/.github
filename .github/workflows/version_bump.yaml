@@ -7,7 +7,7 @@ permissions:
   contents: write
   pull-requests: write
 
-name: Bump Version
+name: Version Bump
 
 jobs:
   bump:
