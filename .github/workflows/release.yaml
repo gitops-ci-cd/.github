@@ -23,6 +23,7 @@ jobs:
         id: version
 
       - name: Determine Tag
+        if: steps.version.outputs.current == ''
         uses: gitops-ci-cd/.github/actions/determine_tag@main
         id: tag
 

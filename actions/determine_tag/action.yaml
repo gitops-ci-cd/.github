@@ -23,12 +23,11 @@ runs:
         if [ -z "$PR_JSON" ]; then
           echo "No PR found for commit $GITHUB_SHA"
           exit 0
+        else
+          echo "PR found: $PR_JSON"
         fi
-        echo "PR found: $PR_JSON"
 
         PR_LABELS=$(jq -r '.labels[].name' <<< "$PR_JSON" | tr '\n' ' ')
-        echo "Labels found: $PR_LABELS"
-
         if [[ $PR_LABELS =~ major ]]; then
           increment="major"
         elif [[ $PR_LABELS =~ minor ]]; then
@@ -40,7 +39,7 @@ runs:
           increment="patch"
         fi
 
-        echo "Determined label: $increment"
+        echo "Applicable label: $increment"
         echo "INCREMENT=$increment" >> $GITHUB_ENV
 
     - name: Check for "patch" Label

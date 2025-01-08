@@ -19,6 +19,7 @@ runs:
         VERSION: ${{ inputs.version }}
       shell: bash
       run: |
+        echo "Creating release v${VERSION}..."
         gh release create "v${VERSION}" \
           --title "Version ${VERSION}" \
           --notes "Released via GitHub Actions" \
