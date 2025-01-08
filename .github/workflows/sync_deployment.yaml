@@ -32,7 +32,8 @@ jobs:
     name: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
-      - uses: gitops-ci-cd/.github/actions/sync_deployment@main
+      - name: Sync Deployment
+        uses: gitops-ci-cd/.github/actions/sync_deployment@main
         with:
           ref: ${{ inputs.ref }}
           state: ${{ inputs.state }}

@@ -1,0 +1,109 @@
+name: Determine Tag
+description: Determine the appropriate tag per the last commit
+
+outputs:
+  current:
+    description: The current tag of the project
+    value: ${{ steps.current.outputs.tag }}
+  next:
+    description: The new calculated tag for the project
+    value: ${{ steps.next.outputs.tag }}
+
+runs:
+  using: composite
+  steps:
+    - name: Lookup Increment Label from PR
+      if: github.event_name != 'pull_request'
+      shell: bash
+      run: |
+        echo "Looking for PR associated with commit $GITHUB_SHA..."
+        PR_JSON=$(gh pr list --state merged --json number,labels,mergeCommit --jq ".[] | select(.mergeCommit == \"$GITHUB_SHA\")")
+        if [ -z "$PR_JSON" ]; then
+          echo "No PR found for commit $GITHUB_SHA"
+          exit 0
+        fi
+        echo "PR found: $PR_JSON"
+
+        PR_LABELS=$(jq -r '.labels[].name' <<< "$PR_JSON" | tr '\n' ' ')
+        echo "Labels found: $PR_LABELS"
+
+        if [[ $PR_LABELS =~ major ]]; then
+          increment="major"
+        elif [[ $PR_LABELS =~ minor ]]; then
+          increment="minor"
+        elif [[ $PR_LABELS =~ patch ]]; then
+          increment="patch"
+        else
+          # Assumes if no PR was found, then whoever made the change was fixing a bug or tweaking something small
+          increment="patch"
+        fi
+
+        echo "Determined label: $increment"
+        echo "INCREMENT=$increment" >> $GITHUB_ENV
+
+    - name: Check for "patch" Label
+      if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'patch') }}
+      shell: bash
+      run: |
+        echo "Found 'patch' label."
+        echo "INCREMENT=patch" >> $GITHUB_ENV
+
+    - name: Check for "minor" Label
+      if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'minor') }}
+      shell: bash
+      run: |
+        echo "Found 'minor' label."
+        echo "INCREMENT=minor" >> $GITHUB_ENV
+
+    - name: Check for "major" Label
+      if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'major') }}
+      shell: bash
+      run: |
+        echo "Found 'major' label."
+        echo "INCREMENT=major" >> $GITHUB_ENV
+
+    - name: Add default Label
+      if: ${{ github.event_name == 'pull_request' && env.INCREMENT == '' }}
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+      shell: bash
+      run: |
+        # Assumes changes within a PR are feature related
+        increment=minor
+        echo "INCREMENT=$increment" >> $GITHUB_ENV
+        echo "No valid label found. Adding '$increment'."
+        gh pr edit $PR_NUMBER --add-label $increment
+
+    - name: Determine Current Tag
+      id: current
+      shell: bash
+      run: |
+        git fetch --tags
+        current_tag=$(git tag --list "v[0-9]*" --sort=-v:refname | head -n 1)
+        if [ -n "$current_tag" ]; then
+          current_tag=${current_tag#v}
+        else
+          echo "No tags found. Using 0.0.0 as current."
+          current_tag="0.0.0"
+        fi
+        echo "CURRENT_TAG=$current_tag" >> $GITHUB_ENV
+        echo "tag=$current_tag" >> $GITHUB_OUTPUT
+        echo "Current Tag: $current_tag"
+
+    - name: Calculate Next Tag
+      id: next
+      shell: bash
+      run: |
+        major=$(echo $CURRENT_TAG | cut -d'.' -f1)
+        minor=$(echo $CURRENT_TAG | cut -d'.' -f2)
+        patch=$(echo $CURRENT_TAG | cut -d'.' -f3)
+
+        case "$INCREMENT" in
+          major) next_tag="$((major + 1)).0.0";;
+          minor) next_tag="$major.$((minor + 1)).0";;
+          patch) next_tag="$major.$minor.$((patch + 1))";;
+        esac
+
+        echo "tag=$next_tag" >> $GITHUB_OUTPUT
+        echo "New Tag: $next_tag"

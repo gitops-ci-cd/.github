@@ -15,14 +15,19 @@ jobs:
     name: ${{ github.repository }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
       - name: Detect Version
         uses: gitops-ci-cd/.github/actions/detect_version@main
         id: version
 
+      - name: Determine Tag
+        uses: gitops-ci-cd/.github/actions/determine_tag@main
+        id: tag
+
       - name: GitHub Release
         uses: gitops-ci-cd/.github/actions/release@main
         with:
           sha: ${{ github.sha }}
-          version: ${{ steps.version.outputs.current }}
+          version: ${{ steps.version.outputs.current || steps.tag.outputs.next }}

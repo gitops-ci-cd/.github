@@ -28,11 +28,13 @@ jobs:
     name: Image
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
         with:
           submodules: 'true'
 
-      - uses: gitops-ci-cd/.github/actions/build@main
+      - name: Build Docker Image
+        uses: gitops-ci-cd/.github/actions/build@main
         with:
           registry: ${{ inputs.registry }}
           image_name: ${{ inputs.image_name }}

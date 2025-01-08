@@ -14,19 +14,14 @@ jobs:
     name: Bump
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.ref }}
 
-      - name: Enforce SemVer
-        uses: gitops-ci-cd/.github/actions/enforce_semver@main
-        id: semver
-
-      - name: Check Tag
-        uses: gitops-ci-cd/.github/actions/check_tag@main
+      - name: Determine Tag
+        uses: gitops-ci-cd/.github/actions/determine_tag@main
         id: tag
-        with:
-          increment: ${{ steps.semver.outputs.increment }}
 
       - name: Update Version
         uses: gitops-ci-cd/.github/actions/update_version@main
