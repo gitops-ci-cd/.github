@@ -19,7 +19,7 @@ runs:
       shell: bash
       run: |
         echo "Looking for PR associated with commit $GITHUB_SHA..."
-        PR_JSON=$(gh pr list --state merged --json number,labels,mergeCommit --jq ".[] | select(.mergeCommit == \"$GITHUB_SHA\")")
+        PR_JSON=$(gh pr list --state merged --json number,labels,mergeCommit --jq ".[] | select(.mergeCommit.oid == \"$GITHUB_SHA\")")
         if [ -z "$PR_JSON" ]; then
           echo "No PR found for commit $GITHUB_SHA"
           exit 0
