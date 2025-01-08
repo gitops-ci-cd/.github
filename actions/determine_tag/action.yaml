@@ -14,6 +14,8 @@ runs:
   steps:
     - name: Lookup Increment Label from PR
       if: github.event_name != 'pull_request'
+      env:
+        GH_TOKEN: ${{ github.token }}
       shell: bash
       run: |
         echo "Looking for PR associated with commit $GITHUB_SHA..."
