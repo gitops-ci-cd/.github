@@ -22,7 +22,6 @@ runs:
         PR_JSON=$(gh pr list --state merged --json number,labels,mergeCommit --jq ".[] | select(.mergeCommit.oid == \"$GITHUB_SHA\")")
         if [ -z "$PR_JSON" ]; then
           echo "No PR found for commit $GITHUB_SHA"
-          exit 0
         else
           echo "PR found: $PR_JSON"
         fi
@@ -85,15 +84,17 @@ runs:
         if [ -n "$current_tag" ]; then
           current_tag=${current_tag#v}
         else
-          echo "No tags found. Using 0.0.0 as current."
+          echo "No tags found. Using default."
           current_tag="0.0.0"
         fi
-        echo "CURRENT_TAG=$current_tag" >> $GITHUB_ENV
         echo "tag=$current_tag" >> $GITHUB_OUTPUT
         echo "Current Tag: $current_tag"
 
     - name: Calculate Next Tag
       id: next
+      env:
+        CURRENT_TAG: ${{ steps.current.outputs.tag }}
+        INCREMENT: ${{ env.INCREMENT }}
       shell: bash
       run: |
         major=$(echo $CURRENT_TAG | cut -d'.' -f1)
