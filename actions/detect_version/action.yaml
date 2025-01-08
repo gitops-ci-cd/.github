@@ -1,4 +1,4 @@
-name: Detects Version
+name: Detect Version
 description: Detects the version within the source code per the language detected
 
 inputs:
