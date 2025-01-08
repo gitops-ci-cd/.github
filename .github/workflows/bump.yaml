@@ -7,7 +7,7 @@ permissions:
   contents: write
   pull-requests: write
 
-name: Version Bump
+name: Bump
 
 jobs:
   bump:
@@ -17,12 +17,15 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.ref }}
-      - uses: gitops-ci-cd/.github/actions/enforce_semver@main
+      - name: Enforce SemVer
+        uses: gitops-ci-cd/.github/actions/enforce_semver@main
         id: semver
-      - uses: gitops-ci-cd/.github/actions/check_version@main
+      - name: Check Version
+        uses: gitops-ci-cd/.github/actions/check_version@main
         id: version
         with:
           increment: ${{ steps.semver.outputs.increment }}
-      - uses: gitops-ci-cd/.github/actions/update_version@main
+      - name: Update Version
+        uses: gitops-ci-cd/.github/actions/update_version@main
         with:
           version: ${{ steps.version.outputs.next }}
