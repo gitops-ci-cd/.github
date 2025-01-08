@@ -74,6 +74,51 @@ runs:
         detected_version=$(grep -oP 'version = "\K'${{ inputs.regex }} build.gradle.kts)
         echo "DETECTED_VERSION=$detected_version" >> $GITHUB_ENV
 
+    - name: Find PR label(s) from Commit
+      id: find
+      if: env.DETECTED_VERSION == ''
+      shell: bash
+      run: |
+        echo "Finding PR associated with commit $GITHUB_SHA..."
+        PR_JSON=$(gh pr list --state merged --json number,labels,mergeCommit --jq ".[] | select(.mergeCommit == \"$GITHUB_SHA\")")
+        if [ -z "$PR_JSON" ]; then
+          echo "No PR found for commit $GITHUB_SHA"
+          exit 0
+        fi
+        echo "PR found: $PR_JSON"
+
+        PR_LABELS=$(jq -r '.labels[].name' <<< "$PR_JSON" | tr '\n' ' ')
+        echo "Labels found: $PR_LABELS"
+
+        if [[ $PR_LABELS =~ major ]]; then
+          INCREMENT="major"
+        elif [[ $PR_LABELS =~ minor ]]; then
+          INCREMENT="minor"
+        elif [[ $PR_LABELS =~ patch ]]; then
+          INCREMENT="patch"
+        else
+          INCREMENT="minor"
+        fi
+
+        echo "Determined label: $INCREMENT"
+        echo "increment=$INCREMENT" >> $GITHUB_OUTPUT
+
+    - name: Detect Next Tag
+      uses: gitops-ci-cd/.github/actions/check_tag@main
+      id: check-tag
+      if: env.DETECTED_VERSION == ''
+      with:
+        increment: ${{ steps.find.outputs.increment }}
+
+    - name: Check for unknown language
+      if: env.DETECTED_VERSION == ''
+      env:
+        detected_version: ${{ steps.check-tag.outputs.next }}
+      shell: bash
+      run: |
+        echo "Unknown language detected."
+        echo "DETECTED_VERSION=$detected_version" >> $GITHUB_ENV
+
     - name: Output Detected Version
       id: determine-current
       shell: bash

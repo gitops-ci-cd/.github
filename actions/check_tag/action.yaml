@@ -4,7 +4,7 @@ description: Check the current and next tag for the project
 inputs:
   increment:
     description: The type of SemVer increment to make
-    required: true
+    default: minor
 
 outputs:
   current:
@@ -29,13 +29,13 @@ runs:
           echo "No tags found. Using 0.0.0 as the current version."
           current_version="0.0.0"
         fi
+        echo "CURRENT_VERSION=$current_version" >> $GITHUB_ENV
         echo "version=$current_version" >> $GITHUB_OUTPUT
         echo "Current Version: $current_version"
 
     - name: Calculate New Version
       id: calculate-next
       env:
-        CURRENT_VERSION: ${{ steps.determine-current.outputs.version }}
         INCREMENT: ${{ inputs.increment }}
       shell: bash
       run: |
