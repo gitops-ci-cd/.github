@@ -1,6 +1,12 @@
 name: Detects Version
 description: Detects the version within the source code per the language detected
 
+inputs:
+  regex:
+    description: The regex to use to match the version
+    required: false
+    default: '[0-9]*\.[0-9]*\.[0-9]*'
+
 outputs:
   current:
     description: The current version of the project
@@ -14,46 +20,46 @@ runs:
       shell: bash
       run: |
         echo "JavaScript detected."
-        echo "DETECTED_VERSION=v$(grep -oP '"version": "\K'"$SEMVER_REGEX package.json)" >> $GITHUB_ENV
+        echo "DETECTED_VERSION=v$(grep -oP '"version": "\K'"${{ inputs.regex }} package.json)" >> $GITHUB_ENV
     - name: Check for .NET
       if: hashFiles('*.csproj') != ''
       shell: bash
       run: |
         echo ".NET detected."
-        for csproj in *.csproj; do
-          [ -e "$csproj" ] || continue
-          echo "DETECTED_VERSION=v$(grep -oP '<Version>\K'"$SEMVER_REGEX" "$csproj")" >> $GITHUB_ENV
+        for file in *.csproj; do
+          [ -e "$file" ] || continue
+          echo "DETECTED_VERSION=v$(grep -oP '<Version>\K'"${{ inputs.regex }}" "$file")" >> $GITHUB_ENV
         done
     - name: Check for .NET
       if: hashFiles('Directory.Build.props') != ''
       shell: bash
       run: |
         echo ".NET detected."
-        echo "DETECTED_VERSION=v$(grep -oP '<Version>\K'"$SEMVER_REGEX" Directory.Build.props)" >> $GITHUB_ENV
+        echo "DETECTED_VERSION=v$(grep -oP '<Version>\K'"${{ inputs.regex }}" Directory.Build.props)" >> $GITHUB_ENV
     - name: Check for Python
       if: hashFiles('setup.py') != ''
       shell: bash
       run: |
         echo "Python detected."
-        echo "DETECTED_VERSION=v$(grep -oP "version='\K'"$SEMVER_REGEX" setup.py)" >> $GITHUB_ENV
+        echo "DETECTED_VERSION=v$(grep -oP "version='\K'"${{ inputs.regex }}" setup.py)" >> $GITHUB_ENV
     - name: Check for Python
       if: hashFiles('pyproject.toml') != ''
       shell: bash
       run: |
         echo "Python detected."
-        echo "DETECTED_VERSION=v$(grep -oP 'version = "\K'"$SEMVER_REGEX" pyproject.toml)" >> $GITHUB_ENV
+        echo "DETECTED_VERSION=v$(grep -oP 'version = "\K'"${{ inputs.regex }}" pyproject.toml)" >> $GITHUB_ENV
     - name: Check for Java
       if: hashFiles('build.gradle') != ''
       shell: bash
       run: |
         echo "Java detected."
-        echo "DETECTED_VERSION=v$(grep -oP 'version = "\K'"$SEMVER_REGEX" build.gradle)" >> $GITHUB_ENV
+        echo "DETECTED_VERSION=v$(grep -oP 'version = "\K'"${{ inputs.regex }}" build.gradle)" >> $GITHUB_ENV
     - name: Check for Kotlin
       if: hashFiles('build.gradle.kts') != ''
       shell: bash
       run: |
         echo "Kotlin detected."
-        echo "DETECTED_VERSION=v$(grep -oP 'version = "\K'"$SEMVER_REGEX" build.gradle.kts)" >> $GITHUB_ENV
+        echo "DETECTED_VERSION=v$(grep -oP 'version = "\K'"${{ inputs.regex }}" build.gradle.kts)" >> $GITHUB_ENV
     - name: Output Detected Version
       id: determine-current
       shell: bash

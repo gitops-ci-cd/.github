@@ -28,7 +28,7 @@ runs:
         echo ".NET detected..."
         files="*.csproj"
         for file in $files; do
-          [ -e "$csproj" ] || continue
+          [ -e "$file" ] || continue
           sed -i 's|<Version>${{ inputs.regex }}</Version>|<Version>'${{ inputs.version }}'</Version>|' "$file"
           echo "Updating $file..."
         done
