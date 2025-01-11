@@ -44,6 +44,7 @@ runs:
           }
 
           console.log(`  Found ${response.data.length} deployments`);
+          console.log(response.data);
           console.log(`  Updating deployment status...`);
 
           let state = core.getInput('state');
