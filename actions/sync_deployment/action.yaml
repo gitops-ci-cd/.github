@@ -44,12 +44,11 @@ runs:
           }
 
           console.log(`  Found ${response.data.length} deployments`);
-          console.log(response.data);
           console.log(`  Updating deployment status...`);
 
           let state = core.getInput('state');
           for (const deployment of response.data) {
-            await github.rest.repos.createDeploymentStatus({
+            const resp = await github.rest.repos.createDeploymentStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
               deployment_id: deployment.id,
@@ -60,9 +59,11 @@ runs:
               description: "Deployment status updated via repository_dispatch",
             });
 
+            console.log(resp)
+
             // Set all previous preview deployments to inactive
             if (core.getInput('environment') != 'preview') break;
             state = 'inactive';
           }
 
-          console.log(`  Deployment status updated: ${core.getInput('state')}`);
+          console.log(`  Deployment(s) status(es) updated to ${state}!`);
