@@ -39,10 +39,11 @@ runs:
           });
 
           if (!response.data.length) {
-            core.setFailed(`No deployments found for ref: ${core.getInput('ref')}`);
+            core.setFailed(`  No deployments found for ref: ${core.getInput('ref')}`);
             return;
           }
 
+          console.log(`  Found ${response.data.length} deployments`);
           console.log(`  Updating deployment status...`);
 
           let state = core.getInput('state');
@@ -58,7 +59,7 @@ runs:
               description: "Deployment status updated via repository_dispatch",
             });
 
-            // Set all previous deployments to inactive for preview environments
+            // Set all previous preview deployments to inactive
             if (core.getInput('environment') != 'preview') break;
             state = 'inactive';
           }
