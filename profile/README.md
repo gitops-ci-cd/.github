@@ -1,6 +1,6 @@
 # GitOps CI/CD Pipeline Overview
 
-This organization provides reference implementations for applications that are Continuously Integrated and Deployed using a GitOps-based approach via [Argo CD](https://argo-cd.readthedocs.io/en/stable/) and [GitHub Actions](https://docs.github.com/en/actions), leveraging separate repositories for application code, infrastructure configuration, and deployment logic.
+This organization provides reference implementations for applications that are Continuously Integrated and Deployed using a GitOps-based approach via [Argo CD](https://argo-cd.readthedocs.io/en/stable/) and [GitHub Actions](https://docs.github.com/en/actions), leveraging separate repositories for application code, deployment manifests, and infrastructure configuration.
 
 ## Repositories Structure
 
