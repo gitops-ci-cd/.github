@@ -10,6 +10,7 @@ name: Lint
 
 jobs:
   lint:
+    if: ${{ !contains(fromJSON('["labeled", "unlabeled"]'), github.event.action) }}
     name: Linter
     runs-on: ubuntu-latest
     steps:

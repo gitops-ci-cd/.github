@@ -10,6 +10,7 @@ name: Test
 
 jobs:
   test:
+    if: ${{ !contains(fromJSON('["labeled", "unlabeled"]'), github.event.action) }}
     name: Tests
     runs-on: ubuntu-latest
     steps:
