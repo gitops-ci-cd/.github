@@ -1,0 +1,28 @@
+# https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions
+# https://docs.github.com/en/code-security/dependabot/working-with-dependabot/automating-dependabot-with-github-actions
+
+on:
+  workflow_call:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+name: Auto-merge
+
+jobs:
+  dependabot:
+    name: Dependabot
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: ${{ github.token }}
+      - name: Enable auto-merge for Dependabot PRs
+        uses: gitops-ci-cd/.github/actions/auto_merge@main
+        with:
+          increment: ${{ steps.metadata.outputs.update-type }}
+          allowed-increment: minor

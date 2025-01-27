@@ -1,0 +1,72 @@
+name: Auto-merge
+description: Check if a pull request can be auto-merged, and if so, mark it for auto-merge
+
+inputs:
+  increment:
+    description: Semver increment of the PR
+    required: true
+  allowed-increment:
+    description: Allowed semver increment (major, minor, or patch)
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: |
+        set -euo pipefail
+
+        echo "Checking if the PR can be auto-merged..."
+
+        # Determine the clean increment based on the presence of specific keywords
+        if [[ "$INCREMENT" == *patch* ]]; then
+          CLEAN_INCREMENT="patch"
+        elif [[ "$INCREMENT" == *minor* ]]; then
+          CLEAN_INCREMENT="minor"
+        elif [[ "$INCREMENT" == *major* ]]; then
+          CLEAN_INCREMENT="major"
+        else
+          echo "  Invalid increment value: '$INCREMENT'. Provide a string containing 'major', 'minor', or 'patch'. Disabling auto-merge."
+          gh pr merge --disable-auto-merge "${PR_NUMBER}"
+          exit 0
+        fi
+
+        # Determine if the PR should be auto-merged
+        case "$ALLOWED_INCREMENT" in
+          major)
+            echo "  The increment '$CLEAN_INCREMENT' is allowed by 'major'."
+            ;;
+          minor)
+            if [[ "$CLEAN_INCREMENT" == "minor" || "$CLEAN_INCREMENT" == "patch" ]]; then
+              echo "  The increment '$CLEAN_INCREMENT' is allowed by 'minor'."
+            else
+              echo "  The increment '$CLEAN_INCREMENT' is not allowed by 'minor'. Disabling auto-merge."
+              gh pr merge --disable-auto-merge "${PR_NUMBER}"
+              exit 0
+            fi
+            ;;
+          patch)
+            if [[ "$CLEAN_INCREMENT" == "patch" ]]; then
+              echo "  The increment '$CLEAN_INCREMENT' is allowed by 'patch'."
+            else
+              echo "  The increment '$CLEAN_INCREMENT' is not allowed by 'patch'. Disabling auto-merge."
+              gh pr merge --disable-auto-merge "${PR_NUMBER}"
+              exit 0
+            fi
+            ;;
+          *)
+            echo "  Invalid allowed-increment: '$ALLOWED_INCREMENT'. Provide one of 'major', 'minor', or 'patch'. Disabling auto-merge."
+            gh pr merge --disable-auto-merge "${PR_NUMBER}"
+            exit 0
+            ;;
+        esac
+
+        # If everything is valid, mark the PR for auto-merge
+        echo "Marking the PR for auto-merge..."
+        gh pr merge --auto --merge "$PR_URL"
+      env:
+        INCREMENT: ${{ inputs.increment }}
+        ALLOWED_INCREMENT: ${{ inputs.allowed-increment }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+        PR_URL: ${{ github.event.pull_request.html_url }}
+        GH_TOKEN: ${{ github.token }}

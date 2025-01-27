@@ -38,6 +38,10 @@ jobs:
     name: Integrate
     uses: gitops-ci-cd/.github/.github/workflows/bump.yaml@main
 
+  auto-merge:
+    name: Check auto-merge
+    uses: gitops-ci-cd/.github/.github/workflows/auto_merge.yaml@main
+
   deploy:
     if: github.event.action == 'labeled' && github.event.label.name == 'preview' || github.event.action == 'synchronize' && contains(github.event.pull_request.labels.*.name, 'preview')
     name: Deploy
