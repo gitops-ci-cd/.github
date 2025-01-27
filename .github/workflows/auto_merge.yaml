@@ -18,11 +18,13 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
       - name: Dependabot metadata
         id: metadata
         uses: dependabot/fetch-metadata@v2
         with:
           github-token: ${{ github.token }}
+
       - name: Enable auto-merge for Dependabot PRs
         uses: gitops-ci-cd/.github/actions/auto_merge@main
         with:
