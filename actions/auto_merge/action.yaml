@@ -14,8 +14,6 @@ runs:
   steps:
     - shell: bash
       run: |
-        set -euo pipefail
-
         echo "Checking if the PR can be auto-merged..."
 
         # Determine the clean increment based on the presence of specific keywords
