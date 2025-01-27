@@ -25,7 +25,7 @@ runs:
           CLEAN_INCREMENT="major"
         else
           echo "  Invalid increment value: '$INCREMENT'. Provide a string containing 'major', 'minor', or 'patch'. Disabling auto-merge."
-          gh pr merge --disable-auto-merge "${PR_NUMBER}"
+          gh pr merge --disable-auto "${PR_NUMBER}"
           exit 0
         fi
 
@@ -39,7 +39,7 @@ runs:
               echo "  The increment '$CLEAN_INCREMENT' is allowed by 'minor'."
             else
               echo "  The increment '$CLEAN_INCREMENT' is not allowed by 'minor'. Disabling auto-merge."
-              gh pr merge --disable-auto-merge "${PR_NUMBER}"
+              gh pr merge --disable-auto "${PR_NUMBER}"
               exit 0
             fi
             ;;
@@ -48,13 +48,13 @@ runs:
               echo "  The increment '$CLEAN_INCREMENT' is allowed by 'patch'."
             else
               echo "  The increment '$CLEAN_INCREMENT' is not allowed by 'patch'. Disabling auto-merge."
-              gh pr merge --disable-auto-merge "${PR_NUMBER}"
+              gh pr merge --disable-auto "${PR_NUMBER}"
               exit 0
             fi
             ;;
           *)
             echo "  Invalid allowed-increment: '$ALLOWED_INCREMENT'. Provide one of 'major', 'minor', or 'patch'. Disabling auto-merge."
-            gh pr merge --disable-auto-merge "${PR_NUMBER}"
+            gh pr merge --disable-auto "${PR_NUMBER}"
             exit 0
             ;;
         esac
