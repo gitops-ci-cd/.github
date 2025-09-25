@@ -23,7 +23,7 @@ on:
         type: string
         description: List of directories to build (for monorepos) (as quoted list, e.g. '["foo", "bar"]')
         required: false
-        default: '["."]'
+        default: '[""]'
 
 permissions:
   contents: read
@@ -53,4 +53,4 @@ jobs:
         uses: gitops-ci-cd/.github/actions/build@main
         with:
           registry: ${{ inputs.registry }}
-          image_name: ${{ inputs.image_name }}
+          image_name: ${{ join( [inputs.image_name, matrix.directory], "/" ) }} 
