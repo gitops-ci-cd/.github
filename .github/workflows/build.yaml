@@ -53,4 +53,4 @@ jobs:
         uses: gitops-ci-cd/.github/actions/build@main
         with:
           registry: ${{ inputs.registry }}
-          image_name: ${{ join( [inputs.image_name, matrix.directory], "/" ) }} 
+          image_name: ${{ join([inputs.image_name, matrix.directory], "/") }} 
