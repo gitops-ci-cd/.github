@@ -4,6 +4,11 @@
 on:
   workflow_call:
     inputs:
+      runs-on:
+        type: string
+        description: Defines the type of machine to run the job on
+        required: false
+        default: ubuntu-latest
       registry:
         type: string
         description: The Docker registry to push the image to
@@ -14,6 +19,11 @@ on:
         description: The name of the Docker image
         required: false
         default: ${{ github.repository }}
+      directories:
+        type: string
+        description: List of directories to build (for monorepos) (as quoted list, e.g. '["foo", "bar"]')
+        required: false
+        default: '["."]'
 
 permissions:
   contents: read
@@ -26,12 +36,18 @@ name: Build & Push Container Image
 jobs:
   image:
     name: Image
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runs-on }}
+    strategy:
+      matrix:
+        directory: ${{ fromJSON(inputs.directories) }}
+    defaults:
+      run:
+        working-directory: ${{ matrix.directory }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
-          submodules: 'true'
+          submodules: true
 
       - name: Build Docker Image
         uses: gitops-ci-cd/.github/actions/build@main
