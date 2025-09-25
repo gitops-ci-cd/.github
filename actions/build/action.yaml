@@ -10,6 +10,10 @@ inputs:
     description: The name of the Docker image
     required: false
     default: ${{ github.repository }}
+  platforms:
+    description: List of target platforms for build
+    required: false
+    default: linux/arm64
 
 runs:
   using: composite
@@ -46,7 +50,7 @@ runs:
       with:
         push: true
         context: .
-        platforms: linux/amd64,linux/arm64
+        platforms: ${{ inputs.platforms }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         cache-from: type=gha
