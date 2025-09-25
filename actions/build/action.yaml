@@ -2,6 +2,10 @@ name: Build
 description: Build and push a Docker image to ghcr.io
 
 inputs:
+  push:
+    description: Whether to push the build image to the registry
+    required: false
+    default: true
   registry:
     description: The Container registry to push the image to
     required: false
@@ -56,7 +60,7 @@ runs:
       id: push
       uses: docker/build-push-action@v6
       with:
-        push: true
+        push: ${{ inputs.push }}
         context: .
         platforms: ${{ inputs.platforms }}
         tags: ${{ steps.meta.outputs.tags }}
@@ -65,7 +69,7 @@ runs:
         cache-to: type=gha,mode=max
 
     - name: Generate artifact attestation
-      if: ${{ github.event_name != 'pull_request' }}
+      if: ${{ inputs.push && github.event_name != 'pull_request' }}
       uses: actions/attest-build-provenance@v3
       with:
         subject-name: ${{ inputs.registry }}/${{ inputs.image_name }}
