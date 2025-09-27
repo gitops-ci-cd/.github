@@ -5,7 +5,7 @@ inputs:
   push:
     description: Whether to push the build image to the registry
     required: false
-    default: true
+    default: 'true'
   registry:
     description: The Container registry to push the image to
     required: false
@@ -60,7 +60,7 @@ runs:
       id: push
       uses: docker/build-push-action@v6
       with:
-        push: ${{ inputs.push }}
+        push: ${{ inputs.push == 'true' }}
         context: .
         platforms: ${{ inputs.platforms }}
         tags: ${{ steps.meta.outputs.tags }}
