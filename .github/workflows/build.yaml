@@ -53,4 +53,4 @@ jobs:
         uses: gitops-ci-cd/.github/actions/build@main
         with:
           registry: ${{ inputs.registry }}
-          image_name: ${{ inputs.image_name }}${{ matrix.directory == '.' && '' || '/' }}${{ matrix.directory == '.' && '' || matrix.directory }}
+          image_name: ${{ format('{0}{1}', inputs.image_name, matrix.directory != '.' && format('/{0}', matrix.directory) || '') }}
