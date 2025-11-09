@@ -18,10 +18,10 @@ inputs:
     description: The name of the Docker image
     required: false
     default: ${{ github.repository }}
-  dockerfile_path:
+  dockerfile:
     description: The path to the Dockerfile
     required: false
-    default: .
+    default: ./Dockerfile
   platforms:
     description: List of target platforms for build
     required: false
@@ -61,7 +61,7 @@ runs:
       with:
         push: false
         context: .
-        file: ${{ inputs.dockerfile_path }}/Dockerfile
+        file: ${{ inputs.dockerfile }}
         outputs: type=local,dest=./output
         cache-from: type=gha
         cache-to: type=gha,mode=max
@@ -91,7 +91,7 @@ runs:
       with:
         push: true
         context: .
-        file: ${{ inputs.dockerfile_path }}/Dockerfile
+        file: ${{ inputs.dockerfile }}
         platforms: ${{ inputs.platforms }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
