@@ -22,6 +22,10 @@ inputs:
     description: The name of the Docker image
     required: false
     default: ${{ github.repository }}
+  dockerfile_path:
+    description: The path to the Dockerfile
+    required: false
+    default: .
   platforms:
     description: List of target platforms for build
     required: false
@@ -62,6 +66,7 @@ runs:
       with:
         push: ${{ inputs.push == 'true' }}
         context: .
+        file: ${{ inputs.dockerfile_path }}/Dockerfile
         platforms: ${{ inputs.platforms }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}

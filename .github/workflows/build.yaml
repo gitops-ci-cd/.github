@@ -4,7 +4,7 @@
 on:
   workflow_call:
     inputs:
-      runs-on:
+      runs_on:
         type: string
         description: Defines the type of machine to run the job on
         required: false
@@ -36,7 +36,7 @@ name: Build & Push Container Image
 jobs:
   image:
     name: Image
-    runs-on: ${{ inputs.runs-on }}
+    runs-on: ${{ inputs.runs_on }}
     strategy:
       matrix:
         directory: ${{ fromJSON(inputs.directories) }}
@@ -54,3 +54,4 @@ jobs:
         with:
           registry: ${{ inputs.registry }}
           image_name: ${{ format('{0}{1}', inputs.image_name, matrix.directory != '.' && format('/{0}', matrix.directory) || '') }}
+          dockerfile_path: ${{ matrix.directory }}
