@@ -2,10 +2,6 @@ name: Build
 description: Build and push a Docker image to ghcr.io
 
 inputs:
-  push:
-    description: Whether to push the build image to the registry
-    required: false
-    default: 'true'
   registry:
     description: The Container registry to push the image to
     required: false
@@ -60,11 +56,30 @@ runs:
         username: ${{ inputs.registry_username }}
         password: ${{ inputs.registry_password }}
 
+    - name: Build (artifact export)
+      uses: docker/build-push-action@v6
+      with:
+        push: false
+        context: .
+        file: ${{ inputs.dockerfile_path }}/Dockerfile
+        outputs: type=local,dest=./out
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: Upload ./out (if present)
+      if: ${{ hashFiles('out/**') != '' }}
+      uses: actions/upload-artifact@v5
+      with:
+        name: out
+        path: out
+        if-no-files-found: ignore
+
     - name: Build and push
+      if: ${{ hashFiles('out/**') == '' }}
       id: push
       uses: docker/build-push-action@v6
       with:
-        push: ${{ inputs.push == 'true' }}
+        push: true
         context: .
         file: ${{ inputs.dockerfile_path }}/Dockerfile
         platforms: ${{ inputs.platforms }}
@@ -74,7 +89,7 @@ runs:
         cache-to: type=gha,mode=max
 
     - name: Generate artifact attestation
-      if: ${{ inputs.push && github.event_name != 'pull_request' }}
+      if: ${{ inputs.push && github.event_name != 'pull_request' && hashFiles('out/**') == '' }}
       uses: actions/attest-build-provenance@v3
       with:
         subject-name: ${{ inputs.registry }}/${{ inputs.image_name }}
