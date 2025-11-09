@@ -66,8 +66,18 @@ runs:
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
+    - name: Detect if out directory has content
+      id: detect_out
+      shell: bash
+      run: |
+        if [ -d "out" ] && [ "$(ls -A out)" ]; then
+          echo "present=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "present=false" >> "$GITHUB_OUTPUT"
+        fi
+
     - name: Upload ./out (if present)
-      if: ${{ hashFiles('out/**') != '' }}
+      if: ${{ steps.detect_out.outputs.present == 'true' }}
       uses: actions/upload-artifact@v5
       with:
         name: out
@@ -75,7 +85,7 @@ runs:
         if-no-files-found: ignore
 
     - name: Build and push
-      if: ${{ hashFiles('out/**') == '' }}
+      if: ${{ steps.detect_out.outputs.present == 'false' }}
       id: push
       uses: docker/build-push-action@v6
       with:
@@ -89,7 +99,7 @@ runs:
         cache-to: type=gha,mode=max
 
     - name: Generate artifact attestation
-      if: ${{ inputs.push && github.event_name != 'pull_request' && hashFiles('out/**') == '' }}
+      if: ${{ inputs.push && github.event_name != 'pull_request' && steps.detect_out.outputs.present == 'false' }}
       uses: actions/attest-build-provenance@v3
       with:
         subject-name: ${{ inputs.registry }}/${{ inputs.image_name }}
