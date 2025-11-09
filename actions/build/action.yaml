@@ -62,26 +62,26 @@ runs:
         push: false
         context: .
         file: ${{ inputs.dockerfile_path }}/Dockerfile
-        outputs: type=local,dest=./out
+        outputs: type=local,dest=./output
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
-    - name: Detect if out directory has content
+    - name: Detect if output directory has /out
       id: detect_out
       shell: bash
       run: |
-        if [ -d "out" ] && [ "$(ls -A out)" ]; then
+        if [ -d "output/out" ] && [ "$(ls -A output/out)" ]; then
           echo "present=true" >> "$GITHUB_OUTPUT"
         else
           echo "present=false" >> "$GITHUB_OUTPUT"
         fi
 
-    - name: Upload ./out (if present)
+    - name: Upload ./output/out (if present)
       if: ${{ steps.detect_out.outputs.present == 'true' }}
       uses: actions/upload-artifact@v5
       with:
         name: out
-        path: out
+        path: output/out
         if-no-files-found: ignore
 
     - name: Build and push
