@@ -46,6 +46,10 @@ jobs:
         with:
           submodules: true
 
+      - name: Install Dependencies
+        run: docker compose run --rm install
+        continue-on-error: true
+
       - name: Build Docker Image
         uses: gitops-ci-cd/.github/actions/build@main
         with:
