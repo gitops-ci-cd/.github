@@ -40,9 +40,6 @@ jobs:
     strategy:
       matrix:
         directory: ${{ fromJSON(inputs.directories) }}
-    defaults:
-      run:
-        working-directory: ${{ matrix.directory }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v5
