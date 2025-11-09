@@ -19,11 +19,12 @@ on:
         description: The name of the Docker image
         required: false
         default: ${{ github.repository }}
-      dockerfiles:
+      directories:
         type: string
-        description: List of Dockerfile paths to build (for monorepos) (as quoted list, e.g. '["foo/Dockerfile", "Dockerfile.bar"]')
+        description: List of directories to build (for monorepos) (as quoted list, e.g. '["foo", "bar"]')
         required: false
-        default: '["./Dockerfile"]'
+        default: '["."]'
+
 permissions:
   contents: read
   packages: write
@@ -38,7 +39,7 @@ jobs:
     runs-on: ${{ inputs.runs_on }}
     strategy:
       matrix:
-        dockerfile: ${{ fromJSON(inputs.dockerfiles) }}
+        directory: ${{ fromJSON(inputs.directories) }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v5
@@ -53,5 +54,5 @@ jobs:
         uses: gitops-ci-cd/.github/actions/build@main
         with:
           registry: ${{ inputs.registry }}
-          image_name: ${{ format('{0}{1}', inputs.image_name, matrix.dockerfile != './Dockerfile' && format('/{0}', matrix.dockerfile) || '') }}
-          dockerfile: ${{ matrix.dockerfile }}
+          image_name: ${{ format('{0}{1}', inputs.image_name, matrix.directory != '.' && format('/{0}', matrix.directory) || '') }}
+          dockerfile: ${{ matrix.directory }}/Dockerfile
