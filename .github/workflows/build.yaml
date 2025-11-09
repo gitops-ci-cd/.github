@@ -21,7 +21,7 @@ on:
         default: ${{ github.repository }}
       directories:
         type: string
-        description: List of directories to build (for monorepos) (as quoted list, e.g. '["foo", "bar"]')
+        description: List of directories with Dockerfiles to build (for monorepos) (as quoted list, e.g. '["foo", "bar"]')
         required: false
         default: '["."]'
 
